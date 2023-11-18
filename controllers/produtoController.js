@@ -26,12 +26,23 @@ async function listarProdutos(req, res) {
         const query = 'SELECT * FROM Produtos';
         const results = await banco.conn.query(query);
 
-        res.status(200).json({ data: { products: results } });
+        // Converter o resultado para JSON evitando estruturas circulares
+        const products = JSON.parse(JSON.stringify(results, function (key, value) {
+            // Excluir propriedades que causam circularidade
+            if (key === '_timer' || key === '_object') {
+                return undefined;
+            }
+            return value;
+        }));
+
+        res.status(200).json({ data: { products } });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Erro ao listar produtos.' });
+        res.status(500).json({ err: err.message, error: 'Erro ao listar produtos.' });
     }
 }
+
+
 
 async function obterProdutoPorId(req, res) {
     try {
