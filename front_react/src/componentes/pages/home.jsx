@@ -14,7 +14,7 @@ function Home() {
         <img src={logo} alt="Logo Empresa" />
         </div>
         
-        <h1>Sistema de restaurante</h1>
+        <h1>Plusnet e-commerce</h1>
         <h3>Bem vindo!</h3>
         
       </div>

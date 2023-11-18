@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../styles/relatorioCliente.module.css";
+import styles from "../styles/relatorioProduto.module.css";
 
 function RelatorioPedido() {
   const [pedidos, setPedidos] = useState([]);
