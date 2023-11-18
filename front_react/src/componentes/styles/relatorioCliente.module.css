@@ -1,0 +1,232 @@
+.formulario_container {
+
+  justify-content: center;
+  background-color: #850f00;
+  
+  /* padding: 4rem 0; */
+}
+
+
+.titulo_formulario {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff;
+  
+}
+
+
+/* relatorioCliente.module.css */
+
+.div_relatorio {
+  display: flex;
+  justify-content: center;
+}
+
+.ul_cards {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 80%; /* Ajuste para ocupar 80% da tela */
+}
+
+.li_cards {
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+}
+
+.li_cards p {
+  margin: 8px 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+/* Se quiser uma sombra mais forte ao passar o mouse */
+.li_cards:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.619);
+}
+
+.button_cards{
+  background-color: #850f00;
+    color: #ccc;
+    border-radius: 6px;
+    padding: 4px;
+    width: 66px;
+    border: white;
+    font-weight: bold
+
+}
+
+.button_cards:hover{
+  box-shadow: 0 7px 16px rgba(255, 0, 0, 0.615);
+
+}
+
+/* relatorioCliente.module.css */
+
+.modal_exclusao {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  text-align: center;
+}
+
+.modal_exclusao p {
+  margin-bottom: 20px;
+}
+
+.modal_botoes {
+  display: flex;
+  justify-content: center;
+}
+
+.modal_botoes button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #ff3333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+/* Adicione mais estilos conforme necessário */
+/* Adapte conforme necessário */
+
+.button2_cards{
+  background-color: #10c000;
+    color: #ccc;
+    border-radius: 6px;
+    padding: 4px;
+    width: 66px;
+    border: white;
+    font-weight: bold
+
+}
+
+.button2_cards:hover{
+  box-shadow: 0 7px 16px rgba(64, 255, 0, 0.615);
+
+}
+
+.modal_edicao {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color:  rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  text-align: center;
+  color: #ffffff;
+  /* Adicione mais estilos conforme necessário */
+}
+
+.form_edicao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Adapte conforme necessário */
+.buttons{
+  justify-content: space-between;
+  display: flex;
+}
+
+
+.div_adicionar{
+
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  width: 80%;
+
+
+}
+
+
+.botao_adicionar{
+
+  width: 128px;
+  height: 39px;
+  background: black;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  border: white;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+
+
+}
+
+
+.botao_adicionar:hover{
+  box-shadow: 0 7px 16px rgba(255, 255, 255, 0.615);
+
+}
+
+
+.modal_cadastro {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  text-align: center;
+}
+
+.modal_cadastro p {
+  margin-bottom: 20px;
+}
+
+.form_cadastro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form_cadastro label {
+  margin-bottom: 10px;
+}
+
+.form_cadastro input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+
+.modal_botoes {
+  display: flex;
+  justify-content: center;
+}
+
+.modal_botoes button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}

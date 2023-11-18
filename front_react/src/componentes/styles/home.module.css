@@ -1,0 +1,119 @@
+.formulario_container {
+  display: flex;
+  justify-content: center;
+  background-color: #850f00;
+  height: 100vh;
+  /* padding: 4rem 0; */
+  padding: 4rem 0;
+}
+
+.lista_menus {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #222;
+  border: 1px solid #222;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  gap: 20px;
+}
+
+.lista_menus a {
+  font-size: 20px;
+  padding: 1rem 3em;
+  cursor: pointer;
+  color: #222;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.lista_menus a:hover {
+  color: #ffbb22;
+}
+
+.titulo_formulario {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff;
+  
+}
+
+.subtitulo_formulario span {
+  color: #04709f;
+  text-decoration: underline;
+}
+
+.card_formulario_container {
+  display: flex;
+  flex-direction: column;
+  color: #222;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.informacoes_formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 11px;
+}
+
+.informacoes_formulario input,
+.nacionalidade_formulario,
+.genero_formulario {
+  border-radius: 10px;
+  border: 1px solid #222;
+  outline: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 233px;
+}
+
+.genero_formulario {
+  display: flex;
+  flex-direction: column;
+}
+
+.button_formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_formulario button,
+.conta_formulario button {
+  width: 200px;
+  height: 40px;
+  background-color: #000000;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.6s ease-in-out;
+}
+
+.button_formulario:hover button {
+  background-color: #222;
+  color: #ffffff;
+}
+
+.logo_container {
+  display: flex;
+  align-items: center;
+}
+
+.logo_container img {
+  width: 90px;
+  height: 90px;
+}
