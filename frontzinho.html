@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+
+
+    <script>
+
+        // npm install uuid
+
+
+        const { v4: uuidv4 } = require('uuid');
+
+        // Gere um UUID v4
+        const uuid = uuidv4();
+
+        console.log(uuid); // Saída: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
+
+        // npm install jsonwebtoken express-session
+
+
+        const express = require('express');
+        const session = require('express-session');
+
+        const app = express();
+
+        app.use(
+            session({
+                secret: 'sua-chave-secreta-aqui', // Substitua pela sua chave secreta
+                resave: false,
+                saveUninitialized: true,
+            })
+        );
+
+
+        const jwt = require('jsonwebtoken');
+
+
+        // Crie um token de sessão para o usuário temporário (por exemplo, usando um UUID)
+        const tempUserId = generateTemporaryUserId(); // Substitua por uma função que gera um ID único
+        const sessionToken = jwt.sign({ userId: tempUserId }, 'sua-chave-secreta-aqui');
+        // Armazenar o token de sessão na sessão ou em outro local:
+        // Você pode armazenar o sessionToken na sessão do Express ou em algum outro local, como o Local Storage do navegador, dependendo de como deseja implementar o carrinho.
+
+        // Crie um token de sessão com informações relevantes
+        const token = jwt.sign({ userId: 123 }, 'sua-chave-secreta-aqui');
+
+        // Armazene o token na sessão
+        req.session.sessionToken = token;
+
+
+        const jwt = require('jsonwebtoken');
+
+        // Recupere o token da sessão
+        const sessionToken = req.session.sessionToken;
+
+        // Verifique o token
+        jwt.verify(sessionToken, 'sua-chave-secreta-aqui', (err, decoded) => {
+            if (err) {
+                // Token inválido, redirecione o usuário para a página de login
+                res.redirect('/login');
+            } else {
+                // Token válido, permita o acesso à rota protegida
+                // decoded contém os dados do token, como userId
+                // Faça o que for necessário com os dados do usuário
+            }
+        });
+
+
+
+        req.session.destroy((err) => {
+            if (err) {
+                // Lida com erros, se houver
+            } else {
+                // Sessão destruída com sucesso
+                // Redirecione o usuário para a página de login ou página inicial
+                res.redirect('/login');
+            }
+        });
+
+
+        const jwt = require('jsonwebtoken');
+
+        // Recupere o token de sessão temporário da sessão ou outro local
+        const sessionToken = req.session.sessionToken; // ou do Local Storage
+
+        // Verifique o token
+        jwt.verify(sessionToken, 'sua-chave-secreta-aqui', (err, decoded) => {
+            if (err) {
+                // Token inválido, redirecione o usuário para a página de login ou para criar uma conta
+                res.redirect('/login-or-create-account');
+            } else {
+                // Token válido, permita o acesso às funções de carrinho
+                // decoded contém os dados do token, como userId (tempUserId)
+                // Faça o que for necessário com os dados do usuário temporário
+            }
+        });
+
+
+
+    </script>
+
+
+
+    <script src="" async defer>
+
+
+        // Verifica se o token de carrinho existe no localStorage e retorna-o
+        function getCartToken() {
+            return localStorage.getItem('cartToken');
+        }
+
+        // Define um novo token de carrinho e o armazena no localStorage
+        function setCartToken(token) {
+            localStorage.setItem('cartToken', token);
+        }
+
+        // Verifica se o token de conta existe no localStorage e retorna-o
+        function getAccountToken() {
+            return localStorage.getItem('accountToken');
+        }
+
+        // Define um novo token de conta e o armazena no localStorage
+        function setAccountToken(token) {
+            localStorage.setItem('accountToken', token);
+        }
+
+        // Função para gerar um novo token
+        function generateToken() {
+            // Gere um token único, por exemplo, usando um UUID ou alguma outra técnica
+            const token = uuid(); // Supondo que você tenha uma função uuid() para gerar um UUID
+            return token;
+        }
+
+        // Verifique se o token de carrinho existe no localStorage
+        const cartToken = getCartToken();
+
+        // Se não houver um token de carrinho, gere um e armazene-o
+        if (!cartToken) {
+            const newCartToken = generateToken();
+            setCartToken(newCartToken);
+        }
+
+        // Verifique se o token de conta existe no localStorage
+        const accountToken = getAccountToken();
+
+        // Se não houver um token de conta, gere um e armazene-o
+        if (!accountToken) {
+            const newAccountToken = generateToken();
+            setAccountToken(newAccountToken);
+        }
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

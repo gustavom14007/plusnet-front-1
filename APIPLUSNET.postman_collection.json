@@ -1,0 +1,486 @@
+{
+	"info": {
+		"_postman_id": "309601fe-8f37-471b-9699-7c20214b35a9",
+		"name": "APIPLUSNET",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20444621"
+	},
+	"item": [
+		{
+			"name": "buscar produto",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/buscarProdutos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"buscarProdutos"
+					],
+					"query": [
+						{
+							"key": "lojaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "marcaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoriaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "atributoID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "valorAtributoID",
+							"value": "1 ",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "todosProdutos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/produtosDaLoja",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"produtosDaLoja"
+					],
+					"query": [
+						{
+							"key": "lojaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "marcaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoriaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "atributoID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "valorAtributoID",
+							"value": "1 ",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "produtoXateX",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/produtosDaLoja/:inicio/:fim",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"produtosDaLoja",
+						":inicio",
+						":fim"
+					],
+					"query": [
+						{
+							"key": "lojaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "marcaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "categoriaID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "atributoID",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "valorAtributoID",
+							"value": "1 ",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "inicio",
+							"value": "0"
+						},
+						{
+							"key": "fim",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\":\"juba\",\r\n    \"password\":\"1234\",\r\n    \"loja\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdicionarCarrinho",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"produtoID\":\"1\",\r\n    \"varianteID\":\"1\",\r\n    \"quantidade\" : \"100\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/adicionarAoCarrinho",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"adicionarAoCarrinho"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CriarPedido",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"produtoID\":\"1\",\r\n    \"varianteID\":\"1\",\r\n    \"quantidade\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/criarPedido",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"criarPedido"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarPedidosUsuario",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"produtoID\":\"1\",\r\n    \"varianteID\":\"1\",\r\n    \"quantidade\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/listarPedidosUsuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listarPedidosUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarPedidosLoja",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-acess-token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "loja",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/listarPedidos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listarPedidos"
+					],
+					"query": [
+						{
+							"key": "dataMinima",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "dataMaxima",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "valorMinimo",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "valorMaximo",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "idLoja",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\":\"juba\",\r\n    \"password\":\"1234\",\r\n    \"email\":\"email@email2\",\r\n    \"loja\":\"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/registrar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"registrar"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibG9qYSI6MSwiaWF0IjoxNjk1NzU4NzA2LCJleHAiOjE2OTU3NTk2MDZ9.QzqxuwG1z1VLpdJTEe_26dvjODKE4-8mUdm7LRz5x8c",
+			"type": "string"
+		}
+	]
+}

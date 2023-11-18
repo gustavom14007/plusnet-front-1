@@ -1,0 +1,65 @@
+
+
+
+
+
+cliente chega na página inicial:
+lista "loja"
+
+verifica se tem um token no localstorage
+se nao tiver, gera um token novo e guarda no localstorage
+se tiver, valida o token antigo e gera um e guarda no localstorage
+
+verifica se está logado (token de usuário cadastrado ativo) (usuário cadastrado)
+
+listar os grupos
+listar as marcas
+listar todos produtos 
+
+verifica se tem um carrinho no localstorage
+se tiver, carrega o carrinho salvo
+carrinho = {idProduto, idVariante, idCarrinho}
+
+produto = {produto em si, variantes, atributos, valor_atributo, grupos: [grupo_produto], marcas: [marca_produto]}
+
+
+com todos produtos no meu carrinho eu devo conseguir criar uma venda
+
+token do carrinho tem que ser offline
+
+token da conta online
+
+2 tokens possiveis hehehe
+
+adicionar um produto no carrinho não pode ser via banco?
+
+carrinho tem que ser offline pra postar online (enviar o carrinho e seus ids de produto/variante e quantidade)
+
+
+------------
+
+a pessoa entra no meu site
+
+uma lista de produtos apenas com os 20 primeiros produtos do select vão aparecer (já fiz esse)
+
+primeiro vai verificar o local storage se já existe um token de carrinho e/ou um token de login
+se tiver, vai enviar para revalidar
+se não tiver, 
+vai ocorrer uma geração de token de carrinho pra ela!
+e se a pessoa cadastrar ou fizer login, vai ser gerado um token de conta pra ela!
+esses tokens sempre são guardados no local storage
+
+se a pessoa tiver um token de carrinho e um de conta, vai ser criado no banco um carrinho vinculado a essa conta da pessoa
+
+se a pessoa tiver só um token de carrinho, vai ser criado no banco um carrinho sem estar vinculado a uma pessoa
+
+se a pessoa tiver um token de conta, vai dar um select no banco e ver o ultimo carrinho que ela fez e trazer pra ela
+
+quando a pessoa adiciona um produto ao carrinho, ele atualiza primeiro no local storage e depois de forma async manda pra atualizar no banco
+
+adicionar ao carrinho: tem que ter o produto/variante e a quantidade
+
+a pessoa pode pegar um carrinho e transformar em um pedido, isso vai exigir uma conta/token de conta e na hora que for confirmado o pedido, esse carrinho vai ser colocado na tabela pedido de forma correta onde carrinho vira pedido e carrinho_produto_variante vira pedido_produto_variante
+
+na hora que um pedido é gerado, a pessoa escolhe o endereço e a forma de entrega, então isso vai de informação pro pedido também
+
