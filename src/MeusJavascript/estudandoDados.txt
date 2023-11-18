@@ -1,0 +1,94 @@
+  // converter de hexadecimal pra decimal, era para ser os passos mas não funciona constantemente
+  // let arrayCompleta = hexValues;
+  // const trecho = arrayCompleta.slice(11, 14);
+  // const hexString = trecho.join(' ');
+  // const decimalValue = hexToDecimal(hexString);
+  // const passos = decimalValue;
+
+  // usar essa info para analisar os dados recebidos
+  //                                                       tipo de dado                                                    passos                               oxig    arterial          bpm
+  //                            [0     1       2      3       4       5 ]      6       7      [ 8       9      10     11       12     13]      14        15    [16]   [17      18]        [19]
+  // Sua array de valores hexadecimais
+  // const arrayCompleta = ['0xcd', '0x00', '0x11', '0x15', '0x01', '0x0c', '0x00', '0x0c', '0x00', '0x00', '0x00', '0x00', '0x09', '0x69', '0x00', '0x00', '0x08', '0x7a', '0x00', '0x28'];
+  //const dadosRecebidos =  [205,     0,     17,      21,     1,      14,     0,      12,     47,     87,     0,      1,      0,      0,      205,   139,     99,     96,     127,    95]
+  // const informacoes = parseDadosRecebidos(dadosRecebidos);
+
+
+  // Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0e 0x00 0x0c 0x2f 0x59 0x00 0x01 0x00 0x00 0xda 0x28 0x62 0x4f 0x6a 0x5a:
+  // Valores em formato Decimal: 205 0 17 21 1 14 0 12 47 89 0 1 0 0 218 40 98 79 106 90:
+
+  // Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0e 0x00 0x0c 0x2f 0x59 0x00 0x01 0x00 0x00 0xe2 0x83 0x63 0x4c 0x7b 0x49:
+  // Valores em formato Decimal:        205   0   17   21   1   14    0   12   47   89    0   1     0    0    226  131  99  76   123   73:
+
+
+
+
+  //
+  //                                      tipo de dado
+  //                                                                                             passos                       caloria
+  //                              [ 0     1   2    3   4    5]   6   7    [ 8    9   10    11  12  13]  14   15   16   17  [18    19]
+  //                             0xcd 0x00 0x11 0x15 0x01 0x0c 0x00 0x0c 0x00 0x00 0x00 0x00 0x00 0x71 0x00 0x00 0x00 0x68 0x00 0x01:
+  // Valores em formato Decimal: 205    0  17   21    1   12    0    12   0    0    0    0    0    113   0   0    0   104   0   1:
+
+  // Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0c 0x00 0x0c 0x00 0x00 0x00 0x00 0x00 0x86 0x00 0x00 0x00 0x7c 0x00 0x02:
+  // Valores em formato Decimal: 205 0 17 21 1 12 0 12 0 0 0 0 0 134 0 0 0 124 0 2:
+
+  //                                                                                  passos                                       caloria
+  //                                   0   1   2     3   4      5  6   7     [8      9    10    11 12   13]    14   15   16   17  [18   19]
+  // Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0c 0x00 0x0c 0x00 0x00 0x00 0x00 0x01 0x2a 0x00 0x00 0x01 0x0d 0x00 0x05:
+  // Valores em formato Decimal:     205   0   17    21   1   12   0    12    0   0    0     0    1    42   0    0    1    13   0    5:
+
+  // 298 passos
+
+
+
+
+
+
+----:
+Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0e 0x00 0x0c 0x2f 0x5a 0x00 0x01 0x00 0x00 0xa7 0xe8 0x62 0x59 0x74 0x53:
+Valores em formato Decimal: 205 0 17 21 1 14 0 12 47 90 0 1 0 0 167 232 98 89 116 83:
+@@@@@:
+@@@@@:
+[14:57:14] undefined:
+----:
+undefined:
+Tipo: desconhecido :
+----:
+Valores em formato hexadecimal: 0xdc 0x00 0x05 0x12 0x18 0x00 0x09 0x01:
+Valores em formato Decimal: 220 0 5 18 24 0 9 1:
+@@@@@:
+@@@@@:
+[14:57:28] undefined:
+----:
+undefined:
+Tipo: coracao :
+Pressão Arterial: 114/69 :
+Saturação: 97% :
+BPM: 88 :
+----:
+Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0e 0x00 0x0c 0x2f 0x5a 0x00 0x01 0x00 0x00 0xa8 0x24 0x61 0x45 0x72 0x58:
+Valores em formato Decimal: 205 0 17 21 1 14 0 12 47 90 0 1 0 0 168 36 97 69 114 88:
+@@@@@:
+@@@@@:
+[14:58:14] undefined:
+----:
+undefined:
+Tipo: desconhecido :
+----:
+Valores em formato hexadecimal: 0xdc 0x00 0x05 0x12 0x18 0x00 0x09 0x01:
+Valores em formato Decimal: 220 0 5 18 24 0 9 1:
+@@@@@:
+@@@@@:
+[14:58:27] undefined:
+----:
+undefined:
+Tipo: coracao :
+Pressão Arterial: 106/79 :
+Saturação: 98% :
+BPM: 90 :
+----:
+Valores em formato hexadecimal: 0xcd 0x00 0x11 0x15 0x01 0x0e 0x00 0x0c 0x2f 0x5a 0x00 0x01 0x00 0x00 0xa8 0x60 0x62 0x4f 0x6a 0x5a:
+Valores em formato Decimal: 205 0 17 21 1 14 0 12 47 90 0 1 0 0 168 96 98 79 106 90:
+@@@@@:
+Ler Info VerConectar Device Print Device

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+
+
+
+  <h1 id="principal">Titulo Principal</h1>
+
+  <button id="seuBotao">Procurar Dispositivos Bluetooth</button>
+
+  <div id="dispositivos" style="display: none;">
+    <h2>Dispositivos Bluetooth Disponíveis:</h2>
+    <ul id="listaDeDispositivos"></ul>
+  </div>
+
+  <div id="informacoesDispositivo" style="display: none;">
+    <h2>Informações do Dispositivo:</h2>
+    <ul id="informacoesLista"></ul>
+  </div>
+
+
+  <div id="bluetoothUI">
+    Dispositivo Conectado
+  </div>
+
+  <script defer>
+    // Função para solicitar acesso ao dispositivo Bluetooth
+    function solicitarAcessoBluetooth() {
+      if ('bluetooth' in navigator) {
+        // Exibir a lista de dispositivos disponíveis
+        document.getElementById('dispositivos').style.display = 'block';
+        // Limpar a lista de dispositivos
+        const listaDeDispositivos = document.getElementById('listaDeDispositivos');
+        listaDeDispositivos.innerHTML = '';
+
+        // Solicitar dispositivos Bluetooth próximos
+        navigator.bluetooth.requestDevice({
+          acceptAllDevices: true
+        })
+          .then(device => {
+            // Exibir informações do dispositivo
+            document.getElementById('informacoesDispositivo').style.display = 'block';
+            const informacoesLista = document.getElementById('informacoesLista');
+            informacoesLista.innerHTML = '';
+            adicionarInformacao(informacoesLista, 'Nome', device.name);
+            adicionarInformacao(informacoesLista, 'ID', device.id);
+            adicionarInformacao(informacoesLista, 'Versão', device.gatt.connected);
+            console.log(device)
+            // Você pode adicionar mais informações do dispositivo aqui
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+          });
+      } else {
+        console.log('Seu navegador não suporta a API Web Bluetooth.');
+      }
+    }
+
+    // Função para adicionar informações à lista
+    function adicionarInformacao(lista, label, valor) {
+      const item = document.createElement('li');
+      item.innerHTML = `<strong>${label}:</strong> ${valor}`;
+      lista.appendChild(item);
+    }
+
+
+
+    // Event listener para acionar a função quando um botão é clicado
+    document.getElementById('seuBotao').addEventListener('click', solicitarAcessoBluetooth);
+
+
+    const bluetoothUI = document.querySelector('#bluetoothUI');
+    navigator.bluetooth.getAvailability().then(isAvailable => {
+      console.log("linha 82 " + isAvailable)
+      bluetoothUI.hidden = !isAvailable;
+    });
+    navigator.bluetooth.addEventListener('availabilitychanged', e => {
+      console.log("linha 86 " + e.value)
+      bluetoothUI.hidden = !e.value;
+    });
+  </script>
+
+
+  <div class="espaco"></div>
+
+  <style>
+    .espaco {
+      margin-top: 150px;
+      margin-bottom: 150px;
+    }
+  </style>
+
+  <div>
+    <label for="allDevices">All Devices</label>
+    <input id="allDevices" type="checkbox">
+    <input id="service" type="text" size="17" list="services" placeholder="Bluetooth Service">
+    <input id="name" type="text" size="17" placeholder="Device Name">
+    <input id="namePrefix" type="text" size="17" placeholder="Device Name Prefix">
+    <button onclick="onButtonClick()">Get Bluetooth Device Info</button>
+    <button onclick="botaoBateria()">Bateria </button>
+    <button onclick="obterDadosSensores()">Dados Sensores</button>
+    <button onclick="obterDadosSensores2()">Dados Sensores22</button>
+  </div>
+
+  <div id="output" class="output">
+    <div id="content"></div>
+    <div id="status"></div>
+    <div id="log"></div>
+
+  </div>
+
+  <script defer>
+
+    async function onButtonClick() {
+      let filters = [];
+
+      let filterService = document.querySelector('#service').value;
+      if (filterService.startsWith('0x')) {
+        filterService = parseInt(filterService);
+      }
+      if (filterService) {
+        filters.push({ services: [filterService] });
+      }
+
+      let filterName = document.querySelector('#name').value;
+      if (filterName) {
+        filters.push({ name: filterName });
+      }
+
+      let filterNamePrefix = document.querySelector('#namePrefix').value;
+      if (filterNamePrefix) {
+        filters.push({ namePrefix: filterNamePrefix });
+      }
+
+      let options = {};
+      if (document.querySelector('#allDevices').checked) {
+        options.acceptAllDevices = true;
+      } else {
+        options.filters = filters;
+      }
+
+      try {
+        log('Buscando dispositivo bluetooth...');
+        log('with ' + JSON.stringify(options));
+        const device = await navigator.bluetooth.requestDevice(options);
+
+        log('> Name:             ' + device.name);
+        log('> Id:               ' + device.id);
+        log('> Conectado:        ' + device.gatt.connected);
+      } catch (error) {
+        log('Argh! ' + error);
+      }
+    }
+
+
+    function log(texto) {
+      const item = document.createElement('li');
+      item.innerHTML = `<strong>${texto}:</strong>`;
+      const lista = document.getElementById('log');
+      lista.appendChild(item);
+
+    }
+
+
+
+
+
+
+
+
+    async function botaoBateria() {
+      try {
+        log('Buscando dispositivo...');
+        const device = await navigator.bluetooth.requestDevice({
+          // filters: [{ services: ['0x180D'] }]
+          acceptAllDevices: true,
+          optionalServices: ['5833ff01-9b8b-5191-6142-22a4536ef123', '6e400001-b5a3-f393-e0a9-e50e24dcca9d', '0000aaa0-0000-1000-8000-aabbccddeeff', 'battery_service']
+        });
+
+        log('Connecting to GATT Server...');
+        const server = await device.gatt.connect();
+
+        log('Getting Battery Service...');
+        const service = await server.getPrimaryService('battery_service');
+
+        log('Getting Battery Level Characteristic...');
+        const characteristic = await service.getCharacteristic('battery_level');
+
+        log('Reading Battery Level...');
+        const value = await characteristic.readValue();
+
+        // @@@@@@
+
+
+
+        log('Obtendo Serviço de Frequência Cardíaca...');
+        const serviceD = await server.getPrimaryService('0000aaa0-0000-1000-8000-aabbccddeeff');
+
+        log('Obtendo Característica de Frequência Cardíaca...');
+        const characteristicD = await serviceD.getCharacteristic('0000aaa0-0000-1000-8000-aabbccddeeff');
+
+        log('Lendo Frequência Cardíaca...');
+        const valueD = await characteristicC.readValue();
+
+
+
+
+        log('Obtendo Serviço de Frequência Cardíaca...');
+        const serviceC = await server.getPrimaryService('5833ff01-9b8b-5191-6142-22a4536ef123');
+
+        log('Obtendo Característica de Frequência Cardíaca...');
+        const characteristicC = await serviceC.getCharacteristic('5833ff01-9b8b-5191-6142-22a4536ef123');
+
+        log('Lendo Frequência Cardíaca...');
+        const valueC = await characteristicC.readValue();
+
+
+        log('Obtendo Serviço de Pressão Sanguínea...');
+        const serviceP = await server.getPrimaryService('6e400001-b5a3-f393-e0a9-e50e24dcca9d');
+
+        log('Obtendo Característica de Pressão Sanguínea...');
+        const characteristicP = await serviceP.getCharacteristic('6e400001-b5a3-f393-e0a9-e50e24dcca9d');
+
+        log('Lendo Pressão Sanguínea...');
+        const valueP = await characteristicP.readValue();
+
+        const systolicPressure = valueP.getUint16(1, true); // Valor da pressão sistólica
+        const diastolicPressure = valueP.getUint16(3, true); // Valor da pressão diastólica
+        const pulseRate = valueP.getUint8(5); // Taxa de pulso
+
+        log('> Pressão Sanguínea: ' + systolicPressure + '/' + diastolicPressure + ' mmHg');
+        log('> Taxa de Pulso: ' + pulseRate + ' BPM');
+
+        const heartRate = valueC.getUint8(1); // O valor da frequência cardíaca é geralmente no segundo byte
+
+        log('> Frequência Cardíaca: ' + heartRate + ' BPM');
+
+        log('> Battery Level is ' + value.getUint8(0) + '%');
+      } catch (error) {
+        log('Argh! ' + error);
+      }
+    }
+
+
+
+    async function obterDadosSensores() {
+      try {
+        log('Solicitando Dispositivo Bluetooth...');
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: ['5833ff01-9b8b-5191-6142-22a4536ef123', 'heart_rate', 'blood_pressure', 'health_thermometer']
+        });
+
+        log('Conectando ao Servidor GATT...');
+        const server = await device.gatt.connect();
+
+        log('Obtendo Serviços e Características...');
+
+        const heartRateService = await server.getPrimaryService('5833ff01-9b8b-5191-6142-22a4536ef123');
+        // const heartRateCharacteristic = await heartRateService.getCharacteristic('heart_rate_measurement');
+
+        const bloodPressureService = await server.getPrimaryService('5833ff01-9b8b-5191-6142-22a4536ef123');
+        // const bloodPressureCharacteristic = await bloodPressureService.getCharacteristic('blood_pressure_measurement');
+
+        const healthThermometerService = await server.getPrimaryService('5833ff01-9b8b-5191-6142-22a4536ef123');
+        // const healthThermometerCharacteristic = await healthThermometerService.getCharacteristic('temperature_measurement');
+
+        log('Lendo Dados de Frequência Cardíaca...');
+        const heartRateValue = await heartRateCharacteristic.readValue();
+        // Processar heartRateValue conforme necessário
+
+        log('Lendo Dados de Pressão Arterial...');
+        const bloodPressureValue = await bloodPressureCharacteristic.readValue();
+        // Processar bloodPressureValue conforme necessário
+
+        log('Lendo Dados de Temperatura Corporal...');
+        const temperatureValue = await healthThermometerCharacteristic.readValue();
+        // Processar temperatureValue conforme necessário
+
+      } catch (error) {
+        log('Erro: ' + error);
+      }
+    }
+
+
+    async function obterDadosSensores2() {
+      try {
+        log('Solicitando Dispositivo Bluetooth...');
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          optionalServices: ['0000aaa0-0000-1000-8000-aabbccddeeff', 'heart_rate', 'blood_pressure', 'health_thermometer']
+        });
+
+        log('Conectando ao Servidor GATT...');
+        const server = await device.gatt.connect();
+
+        log('Obtendo Serviços e Características...');
+
+        const heartRateService = await server.getPrimaryService('0000aaa0-0000-1000-8000-aabbccddeeff');
+        const heartRateCharacteristic = await heartRateService.getCharacteristic('heart_rate_measurement');
+
+        const bloodPressureService = await server.getPrimaryService('0000aaa0-0000-1000-8000-aabbccddeeff');
+        const bloodPressureCharacteristic = await bloodPressureService.getCharacteristic('blood_pressure_measurement');
+
+        const healthThermometerService = await server.getPrimaryService('0000aaa0-0000-1000-8000-aabbccddeeff');
+        const healthThermometerCharacteristic = await healthThermometerService.getCharacteristic('temperature_measurement');
+
+        log('Lendo Dados de Frequência Cardíaca...');
+        const heartRateValue = await heartRateCharacteristic.readValue();
+        // Processar heartRateValue conforme necessário
+
+        log('Lendo Dados de Pressão Arterial...');
+        const bloodPressureValue = await bloodPressureCharacteristic.readValue();
+        // Processar bloodPressureValue conforme necessário
+
+        log('Lendo Dados de Temperatura Corporal...');
+        const temperatureValue = await healthThermometerCharacteristic.readValue();
+        // Processar temperatureValue conforme necessário
+
+      } catch (error) {
+        log('Erro: ' + error);
+      }
+    }
+
+
+
+
+
+
+
+
+  </script>
+
+  <div class="espaco"></div>
+  <input id="service" type="text" list="services" autofocus placeholder="Bluetooth Service">
+  <input id="characteristic" type="text" list="characteristics" placeholder="Bluetooth Characteristic">
+  <button id="startNotifications">Começar</button>
+  <button id="stopNotifications">Parar</button>
+  <button id="pedirEnergia">Energia Enviar</button>
+  <button id="lerInfo"> Ler Info Ver</button>
+
+  <script defer>
+    var myCharacteristic;
+
+    let globalServer;
+    let globalDevice;
+    let globalService;
+    let globalCharacteristic;
+
+    async function onStartButtonClick() {
+      // let serviceUuid = document.querySelector('#service').value;
+      let serviceUuid = '6e400001-b5a3-f393-e0a9-e50e24dcca9d'
+
+      if (serviceUuid.startsWith('0x')) {
+        serviceUuid = parseInt(serviceUuid);
+      }
+
+      // let characteristicUuid = document.querySelector('#characteristic').value;
+      let characteristicUuid = '6e400003-b5a3-f393-e0a9-e50e24dcca9d'
+
+      if (characteristicUuid.startsWith('0x')) {
+        characteristicUuid = parseInt(characteristicUuid);
+      }
+
+      try {
+        log('Buscando Bluetooth Device...');
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true,
+          // filters: [{ services: [serviceUuid] }],
+          optionalServices: ['6e400001-b5a3-f393-e0a9-e50e24dcca9d', '6e400002-b5a3-f393-e0a9-e50e24dcca9d', '6e400003-b5a3-f393-e0a9-e50e24dcca9d']
+        });
+
+        log('Connecting to GATT Server...');
+        const server = await device.gatt.connect();
+
+        log('Getting Service...');
+        const service = await server.getPrimaryService(serviceUuid);
+
+        log('Getting Characteristic...');
+        let myCharacteristic = await service.getCharacteristic(characteristicUuid);
+
+        // Obtenha o Descriptor de Configuração de Característica de Cliente (CCC).
+        // log('Getting Descriptor...');
+        // const cccDescriptor = await myCharacteristic.getDescriptor('00002902-0000-1000-8000-00805f9b34fb');
+
+        // Habilitar notificações configurando o valor do CCC para 0x01.
+        // log('Getting Habilitando Notificações...');
+        // await cccDescriptor.writeValue(new Uint8Array([0x01]));
+
+
+        log('Characteristic Start...');
+        await myCharacteristic.startNotifications();
+
+
+
+
+        // log('Getting Descriptors...');
+        // const descriptors = await myCharacteristic.getDescriptors();
+
+        // log('> Descriptors: ' +
+        // descriptors.map(c => c.uuid).join('\n' + ' '.repeat(19)));
+
+        // log('Getting Service...');
+        // const service2 = await server.getPrimaryService('5833ff01-9b8b-5191-6142-22a4536ef123');
+
+        // log('Getting Characteristic...');
+        // myCharacteristic2 = await service2.getCharacteristic('5833ff03-9b8b-5191-6142-22a4536ef123');
+
+        // await myCharacteristic2.startNotifications();
+
+        log('> NOTIFY começou');
+        myCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
+
+
+        globalDevice = device;
+        globalService = service;
+        globalServer = server;
+        globalCharacteristic = myCharacteristic;
+
+        // myCharacteristic2.addEventListener('characteristicvaluechanged', handleNotifications);
+      } catch (error) {
+        log('Argh! ' + error);
+        console.log(error)
+        console.log(error.name)
+        console.log(error.message)
+        if (error.message == "NetworkError: GATT Server is disconnected. Cannot retrieve services. (Re)connect first with `device.gatt.connect`.") {
+          await device.gatt.connect();
+        }
+      }
+
+    }
+
+    async function botaoResetEnergia() {
+      log('Connecting to caracteristico...');
+      characteristic = await globalService.getCharacteristic('6e400002-b5a3-f393-e0a9-e50e24dcca9d');
+      log('Writing Heart Rate Control Point Characteristic...');
+      // Writing 1 is the signal to reset energy expended.
+      let resetEnergyExpended = Uint8Array.of(0x01);
+      await characteristic.writeValue(resetEnergyExpended);
+      log('> Energy expended has been reset.');
+
+
+    }
+
+    async function botaoLerInfo() {
+      try {
+        log('Botao Ler Info...');
+
+        const comando = new Uint8Array([0x01, 0x02, 0x03]); // Exemplo de comando
+
+        const value = await globalCharacteristic.writeValue(comando);
+
+        log('Dados de fitness lidos: ' + value);
+
+      } catch (error) {
+        log('Erro ao ler característica: ' + error);
+      }
+
+    }
+
+    // async function notificacoes2() {
+    //   // let serviceUuid = document.querySelector('#service').value;
+    //   let serviceUuid = '5833ff01-9b8b-5191-6142-22a4536ef123'
+
+    //   if (serviceUuid.startsWith('0x')) {
+    //     serviceUuid = parseInt(serviceUuid);
+    //   }
+
+    //   // let characteristicUuid = document.querySelector('#characteristic').value;
+    //   let characteristicUuid = '6e400003-b5a3-f393-e0a9-e50e24dcca9d'
+
+    //   if (characteristicUuid.startsWith('0x')) {
+    //     characteristicUuid = parseInt(characteristicUuid);
+    //   }
+
+    //   try {
+    //     log('Requesting Bluetooth Device...');
+    //     const device = await navigator.bluetooth.requestDevice({
+    //       acceptAllDevices: true,
+    //       // filters: [{ services: [serviceUuid] }],
+    //       optionalServices: ['5833ff01-9b8b-5191-6142-22a4536ef123']
+    //     });
+
+    //     log('Connecting to GATT Server...');
+    //     const server = await device.gatt.connect();
+
+    //     log('Getting Service...');
+    //     const service = await server.getPrimaryService(serviceUuid);
+
+    //     log('Getting Characteristic...');
+    //     myCharacteristic = await service.getCharacteristic(characteristicUuid);
+
+    //     await myCharacteristic.startNotifications();
+
+    //     log('> Notifications started');
+    //     myCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
+    //   } catch (error) {
+    //     log('Argh! ' + error);
+    //   }
+    // }
+
+    async function onStopButtonClick() {
+      if (myCharacteristic) {
+        try {
+          await myCharacteristic.stopNotifications();
+          log('> Sem NOTIFY');
+          myCharacteristic.removeEventListener('characteristicvaluechanged', handleNotifications);
+        } catch (error) {
+
+          log('Erro! ' + error);
+
+
+        }
+      }
+    }
+
+    let historicoNotificacoes = {}
+
+
+    function hexToDecimal(hexString) {
+      const hexArray = hexString.split(' '); // Divide a string hex em um array
+      let decimalValue = 0;
+
+      for (let i = 0; i < hexArray.length; i++) {
+        // Converte cada valor hexadecimal em decimal e acumula no valor final
+        const hexValue = parseInt(hexArray[i], 16);
+        decimalValue += hexValue * Math.pow(256, hexArray.length - 1 - i);
+      }
+
+      return decimalValue;
+    }
+
+
+
+    function parseDadosRecebidos(hexValues, decimalValues) {
+      if (hexValues.length < 20) {
+        // Certifique-se de que a matriz de dados tenha pelo menos 20 elementos para conter todas as informações.
+        return null;
+      }
+
+      let dados = decimalValues
+
+      // CORRETO!
+      const pressaoArterial = `${decimalValues[18]}/${decimalValues[17]}`;
+      const batimentosPorMinuto = decimalValues[19];
+      const saturacaoOxigenio = `${decimalValues[16]}%`;
+
+      // const diaSemana = obterDiaSemana(decimalValues[4]); // Função para converter o número do dia da semana.
+
+
+
+      // converter de hexadecimal pra decimal
+      // let arrayCompleta = hexValues;
+      // const trecho = arrayCompleta.slice(11, 14);
+      // const hexString = trecho.join(' ');
+      // const decimalValue = hexToDecimal(hexString);
+      // const passos = decimalValue;
+
+
+
+      //                                                         diaS                                                         passos                               oxig           arterial          bpm
+      //                            0     1       2      3       [4]       5       6       7       8       9      10     [11       12     13]      14        15    [16]         [17      18]        [19]
+      // Sua array de valores hexadecimais
+      // const arrayCompleta = ['0xcd', '0x00', '0x11', '0x15', '0x01', '0x0c', '0x00', '0x0c', '0x00', '0x00', '0x00', '0x00', '0x09', '0x69', '0x00', '0x00', '0x08', '0x7a', '0x00', '0x28'];
+      //                        [205,     0,     17,      21,     1,      14,     0,      12,     47,     87,     0,      1,      0,      0,      205,   139,     99,     96,     127,    95]
+
+
+
+
+
+
+
+      // const horaAtual = `${dados[5]}:${dados[6]}`;
+      // const dataAtual = `${dados[8]}/${dados[7]}`;
+
+      // const distanciaKm = dados[15] + (dados[16] / 10); // Combinar dois bytes e dividir por 10 para obter a distância em quilômetros.
+      // const temperatura = dados[17];
+
+      const objetoInformacoes = {
+        pressaoArterial,
+        saturacaoOxigenio,
+        batimentosPorMinuto
+        // horaAtual,
+        // diaSemana,
+        // dataAtual,
+        // passos
+        // distanciaKm,
+        // temperatura
+      };
+
+      return objetoInformacoes;
+    }
+
+    function obterDiaSemana(numeroDia) {
+      // Implemente uma função para converter o número do dia da semana em um nome de dia.
+      // Por exemplo: 1 -> "Dom", 2 -> "Seg", etc.
+      // Você pode usar um array de nomes de dia ou outra abordagem que preferir.
+      // Esta função depende da estrutura de dados que você deseja usar.
+      // Aqui está um exemplo simples usando um array:
+      const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+      return diasDaSemana[numeroDia] || 'Desconhecido';
+    }
+
+    // Exemplo de uso da função com os dados recebidos
+    // ['0xcd', '0x00', '0x11', '0x15', '0x01', '0x0c', '0x00', '0x0c', '0x00', '0x00', '0x00', '0x00', '0x09', '0x69', '0x00', '0x00', '0x08', '0x7a', '0x00', '0x28'];
+    // const dadosRecebidos = [205, 0, 17, 21, 1, 14, 0, 12, 47, 87, 0, 1, 0, 0, 205, 139, 99, 96, 127, 95];
+    // const informacoes = parseDadosRecebidos(dadosRecebidos);
+
+    // if (informacoes) {
+    // console.log(informacoes);
+    // } else {
+    // console.log('Dados insuficientes para análise.');
+    // }
+
+
+    function handleNotifications(event) {
+      let value = event.target.value;
+
+
+      console.log(value);
+
+
+      // Mostrar os valores em formato hexadecimal
+      let hexValues = [];
+      for (let i = 0; i < value.byteLength; i++) {
+        hexValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+      }
+      console.log(hexValues)
+
+
+
+
+
+      let decimalValues = [];
+      for (let i = 0; i < value.byteLength; i++) {
+        decimalValues.push(value.getUint8(i));
+      }
+      console.log(decimalValues)
+
+      if (decimalValues == [205, 0, 5, 28, 1, 3, 0, 0]) {
+        log('Abrir Câmera')
+      } else if (decimalValues == [205, 0, 5, 28, 1, 2, 0, 0]) {
+        log('Tirar foto')
+      } else if (decimalValues == [205, 0, 5, 28, 1, 4, 0, 0]) {
+        log('Fechar câmera')
+      }
+
+
+      let dadosAtuais = parseDadosRecebidos(hexValues, decimalValues)
+
+      if (dadosAtuais.pressaoArterial != null) {
+        log("----")
+        let now = new Date();
+        log(now.getHours() + "h " + now.getMinutes() + "m")
+        log("Pressão Arterial: " + dadosAtuais.pressaoArterial + "  ")
+        log("Saturação: " + dadosAtuais.saturacaoOxigenio + "  ")
+        log("BPM: " + dadosAtuais.batimentosPorMinuto + "  ")
+        log("----")
+      }
+
+
+      log(dadosAtuais);
+
+      log('Valores em formato hexadecimal: ' + hexValues.join(' '));
+      log('> ' + decimalValues.join(' '));
+    }
+
+
+
+    document.querySelector('#startNotifications').addEventListener('click', function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      // if (isWebBluetoothEnabled()) {
+      // ChromeSamples.clearLog();
+      onStartButtonClick();
+      // }
+    });
+
+    document.querySelector('#stopNotifications').addEventListener('click', function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      // if (isWebBluetoothEnabled()) {
+      onStopButtonClick();
+      // }
+    });
+
+    document.querySelector('#pedirEnergia').addEventListener('click', function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      // if (isWebBluetoothEnabled()) {
+      botaoResetEnergia();
+      // }
+    });
+
+    document.querySelector('#lerInfo').addEventListener('click', function (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      // if (isWebBluetoothEnabled()) {
+      botaoLerInfo();
+      // }
+    });
+  </script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">quasar-estoque-supabase</string>
+    <string name="title_activity_main">quasar-estoque-supabase</string>
+    <string name="package_name">com.medtechinnovations.app</string>
+    <string name="custom_url_scheme">com.medtechinnovations.app</string>
+</resources>
