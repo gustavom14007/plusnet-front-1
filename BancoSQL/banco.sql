@@ -1,1 +1,0 @@
-está no arquivo higher than te satelite, só a parte em cima dos @

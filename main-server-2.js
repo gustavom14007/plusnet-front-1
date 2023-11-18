@@ -8,7 +8,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 // const mysql = require('mysql2')
-const banco = require('./main-db.js')
+const banco = require('./database/main-db.js')
 require('dotenv').config()
 
 const jwt = require('jsonwebtoken')
@@ -17,6 +17,47 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true,
 }))
+
+
+
+// Importando os módulos das rotas
+const authRoutes = require('./routes/authRoutes');
+
+// Usando as rotas no aplicativo Express
+app.use('/auth', authRoutes);
+
+const lojasRoutes = require('./routes/lojaRoutes');
+
+// Usando as rotas
+app.use('/lojas', lojasRoutes);
+
+const produtoRoutes = require('./routes/produtoRoutes');
+
+// Usando as rotas
+app.use('/produtos', produtoRoutes);
+
+
+
+const produtoBuscaRoutes = require('./routes/produtoBuscaRoutes');
+
+// Usando as rotas
+app.use('/produtoBusca', produtoBuscaRoutes);
+
+
+
+const enderecoRoutes = require('./routes/enderecoRoutes');
+
+// Usando as rotas
+app.use('/enderecos', enderecoRoutes);
+
+
+const clienteRoutes = require('./routes/clienteRoutes');
+
+// Usando as rotas
+app.use('/clientes', clienteRoutes);
+
+
+
 
 
 
@@ -260,415 +301,6 @@ app.get('/listarPedidos', async (req, res) => {
 
 
 
-// CREATE TABLE Lojas
-//!LOJA
-// Inserir uma nova loja
-app.post('/lojas', verifyJWT, (req, res) => {
-  const { url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao } = req.body;
-
-  const query = 'INSERT INTO Lojas (url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  banco.conn.query(query, [url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar loja.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Loja cadastrada com sucesso.', store: { id: results.insertId, url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao } });
-  });
-});
-
-// Listar todas as lojas:
-app.get('/lojas', (req, res) => {
-  const query = 'SELECT * FROM Lojas';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar lojas.' });
-      return;
-    }
-
-    res.status(200).json({ stores: results });
-  });
-});
-
-// Atualizar uma loja pelo ID:
-app.put('/lojas/:lojaID', verifyJWT, (req, res) => {
-  const lojaID = req.params.lojaID;
-  const { url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao } = req.body;
-
-  const query = 'UPDATE Lojas SET url = ?, titulo = ?, descricao = ?, modalidade = ?, email = ?, idEndereco = ?, telefone1 = ?, telefone2 = ?, telefone3 = ?, cpfcnpj = ?, inscricaoEstadual = ?, frameworkFrontEnd = ?, breakpoint = ?, fotoProporcao = ?, fotoLarguraP = ?, fotoLarguraG = ?, permitirVendedor = ?, permitirObservacao = ?, emailCopiaOculta = ?, primeiraRegra = ?, regraGratis = ?, permitirPessoaJuridica = ?, idPagamentos = ?, pagamentoCartaoCpfTitular = ?, clearSaleModalidade = ?, clearSaleProduto = ?, clearSaleFingerPrintApp = ?, clearSaleEntityCode = ?, seoRobots = ?, googleAnalyticsID = ?, outrosSituacao = ? WHERE idLoja = ?';
-  banco.conn.query(query, [url, titulo, descricao, modalidade, email, idEndereco, telefone1, telefone2, telefone3, cpfcnpj, inscricaoEstadual, frameworkFrontEnd, breakpoint, fotoProporcao, fotoLarguraP, fotoLarguraG, permitirVendedor, permitirObservacao, emailCopiaOculta, primeiraRegra, regraGratis, permitirPessoaJuridica, idPagamentos, pagamentoCartaoCpfTitular, clearSaleModalidade, clearSaleProduto, clearSaleFingerPrintApp, clearSaleEntityCode, seoRobots, googleAnalyticsID, outrosSituacao, lojaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar a loja.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Loja atualizada com sucesso.' });
-  });
-});
-
-// Deletar uma loja pelo ID:
-app.delete('/lojas/:lojaID', verifyJWT, (req, res) => {
-  const lojaID = req.params.lojaID;
-
-  const query = 'DELETE FROM Lojas WHERE idLoja = ?';
-  banco.conn.query(query, [lojaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar a loja.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Loja deletada com sucesso.' });
-  });
-});
-//!LOJA
-
-// CREATE TABLE Produtos
-// !PRODUTO
-// Inserir produto
-app.post('/produtos', verifyJWT, async (req, res) => {
-  try {
-    const { nome, descricao, preco, precoPromocional, idLoja } = req.body;
-
-    // Validar entrada
-    if (!nome || !descricao || !preco || !idLoja) {
-      return res.status(400).json({ error: 'Dados incompletos para cadastrar o produto.' });
-    }
-
-    const query = 'INSERT INTO Produtos (nome, descricao, preco, precoPromocional, idLoja) VALUES (?, ?, ?, ?, ?)';
-    const results = await banco.conn.query(query, [nome, descricao, preco, precoPromocional, idLoja]);
-
-    res.status(201).json({ message: 'Produto cadastrado com sucesso.', data: { id: results.insertId, nome, descricao, preco, precoPromocional, idLoja } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao cadastrar produto.' });
-  }
-});
-
-// Listar produtos
-app.get('/produtos', async (req, res) => {
-  try {
-    const query = 'SELECT * FROM Produtos';
-    const results = await banco.conn.query(query);
-
-    res.status(200).json({ data: { products: results } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao listar produtos.' });
-  }
-});
-
-// Obter um produto pelo ID
-app.get('/produtos/:produtoID', async (req, res) => {
-  try {
-    const produtoID = req.params.produtoID;
-
-    const query = 'SELECT * FROM Produtos WHERE idProduto = ?';
-    const results = await banco.conn.query(query, [produtoID]);
-
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Produto não encontrado.' });
-    }
-
-    res.status(200).json({ data: { product: results[0] } });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao obter o produto.' });
-  }
-});
-
-// Atualizar um produto pelo ID
-app.put('/produtos/:produtoID', verifyJWT, async (req, res) => {
-  try {
-    const produtoID = req.params.produtoID;
-    const { nome, descricao, preco, precoPromocional } = req.body;
-
-    // Validar entrada
-    if (!nome || !descricao || !preco) {
-      return res.status(400).json({ error: 'Dados incompletos para atualizar o produto.' });
-    }
-
-    const query = 'UPDATE Produtos SET nome = ?, descricao = ?, preco = ?, precoPromocional = ? WHERE idProduto = ?';
-    await banco.conn.query(query, [nome, descricao, preco, precoPromocional, produtoID]);
-
-    res.status(200).json({ message: 'Produto atualizado com sucesso.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao atualizar o produto.' });
-  }
-});
-
-// Deletar um produto pelo ID
-app.delete('/produtos/:produtoID', verifyJWT, async (req, res) => {
-  try {
-    const produtoID = req.params.produtoID;
-
-    const query = 'DELETE FROM Produtos WHERE idProduto = ?';
-    const results = await banco.conn.query(query, [produtoID]);
-
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ error: 'Produto não encontrado.' });
-    }
-
-    res.status(200).json({ message: 'Produto deletado com sucesso.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao deletar o produto.' });
-  }
-});
-
-
-//?lojaID=1&marcaID=1&categoriaID=1&atributoID=1&valorAtributoID=1 
-app.get('/buscarProdutos', verifyJWT, (req, res) => {
-  const { lojaID, marcaID, categoriaID, atributoID, valorAtributoID } = req.query;
-
-
-  let query = `
-    SELECT P.*
-    FROM Produtos AS P
-    JOIN Marca_Produto AS MP ON P.idProduto = MP.idProduto
-    JOIN Marcas AS M ON MP.idMarca = M.idMarca
-    JOIN Grupo_Produto AS GP ON P.idProduto = GP.idProduto
-    JOIN Grupos AS G ON GP.idGrupo = G.idGrupo
-    JOIN Variantes AS V ON P.idProduto = V.idProduto
-    JOIN Atributos AS A ON A.idVariante = V.idVariante
-    JOIN Valor_Atributo AS VA ON A.idAtributo = VA.idAtributo
-    WHERE 1 = 1
-  `;
-
-  if (lojaID) {
-    query += ` AND P.idLoja = ${lojaID}`;
-  }
-
-  if (marcaID) {
-    query += ` AND M.idMarca = ${marcaID}`;
-  }
-
-  if (categoriaID) {
-    query += ` AND G.idGrupo = ${categoriaID}`;
-  }
-
-  if (atributoID && valorAtributoID) {
-    query += `
-      AND A.idAtributo = ${atributoID}
-      AND VA.idValorAtributo = ${valorAtributoID}
-    `;
-  }
-
-  console.log(query)
-
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao buscar produtos.' });
-      return;
-    }
-
-    res.status(200).json({ products: results });
-  });
-});
-
-
-app.get('/produtosDaLoja', verifyJWT, (req, res) => {
-  const lojaID = req.headers.loja; // Obtenha o ID da loja a partir dos parâmetros da URL
-
-  if (!lojaID) {
-    res.status(400).json({ error: 'ID da loja não fornecido.' });
-    return;
-  }
-
-  const query = `
-    SELECT *
-    FROM Produtos
-    WHERE idLoja = ?
-    LIMIT 20
-  `;
-
-  banco.conn.query(query, [lojaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao buscar produtos da loja.' });
-      return;
-    }
-
-    res.status(200).json({ products: results });
-  });
-});
-
-
-
-app.get('/produtosDaLoja/:inicio/:fim', verifyJWT, (req, res) => {
-  const lojaID = req.headers.loja; // Obtenha o ID da loja a partir dos parâmetros da URL
-  const inicio = req.params.inicio; // Obtenha o início do intervalo
-  const fim = req.params.fim; // Obtenha o fim do intervalo
-
-  if (!lojaID || !inicio || !fim) {
-    res.status(400).json({ error: 'Parâmetros ausentes.' });
-    return;
-  }
-
-  const query = `
-    SELECT *
-    FROM Produtos
-    WHERE idLoja = ?
-    LIMIT ?, ?
-  `;
-
-  banco.conn.query(query, [lojaID, parseInt(inicio), parseInt(fim)], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao buscar produtos da loja.' });
-      return;
-    }
-
-    res.status(200).json({ products: results });
-  });
-});
-
-
-
-
-
-// !PRODUTO
-
-
-
-// CREATE TABLE Enderecos
-// !ENDERECOS
-// Inserir um novo endereço:
-app.post('/enderecos', verifyJWT, (req, res) => {
-  const { logradouro, numero, complemento, bairro, cidade, estado, pais, cep, idLoja } = req.body;
-
-  const query = 'INSERT INTO Enderecos (logradouro, numero, complemento, bairro, cidade, estado, pais, cep, idLoja) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  banco.conn.query(query, [logradouro, numero, complemento, bairro, cidade, estado, pais, cep, idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar endereço.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Endereço cadastrado com sucesso.', address: { id: results.insertId, logradouro, numero, complemento, bairro, cidade, estado, pais, cep, idLoja } });
-  });
-});
-// Listar todos os endereços:
-app.get('/enderecos', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Enderecos';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar endereços.' });
-      return;
-    }
-
-    res.status(200).json({ addresses: results });
-  });
-});
-// 
-// Atualizar um endereço pelo ID:
-app.put('/enderecos/:enderecoID', verifyJWT, (req, res) => {
-  const enderecoID = req.params.enderecoID;
-  const { logradouro, numero, complemento, bairro, cidade, estado, pais, cep } = req.body;
-
-  const query = 'UPDATE Enderecos SET logradouro = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?, pais = ?, cep = ? WHERE idEndereco = ?';
-  banco.conn.query(query, [logradouro, numero, complemento, bairro, cidade, estado, pais, cep, enderecoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o endereço.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Endereço atualizado com sucesso.' });
-  });
-});
-// 
-// Deletar um endereço pelo ID:
-app.delete('/enderecos/:enderecoID', verifyJWT, (req, res) => {
-  const enderecoID = req.params.enderecoID;
-
-  const query = 'DELETE FROM Enderecos WHERE idEndereco = ?';
-  banco.conn.query(query, [enderecoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o endereço.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Endereço deletado com sucesso.' });
-  });
-});
-// !ENDERECOS
-
-
-
-// CREATE TABLE Clientes
-// !CLIENTES
-// Inserir um novo cliente:
-app.post('/clientes', verifyJWT, (req, res) => {
-  const { nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha, idLoja } = req.body;
-
-  const query = 'INSERT INTO Clientes (nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha, idLoja) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  banco.conn.query(query, [nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha, idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar cliente.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Cliente cadastrado com sucesso.', client: { id: results.insertId, nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha, idLoja } });
-  });
-});
-
-// Listar todos os clientes:
-app.get('/clientes', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Clientes';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar clientes.' });
-      return;
-    }
-
-    res.status(200).json({ clients: results });
-  });
-});
-
-// Atualizar um cliente pelo ID:
-app.put('/clientes/:clienteID', verifyJWT, (req, res) => {
-  const clienteID = req.params.clienteID;
-  const { nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha } = req.body;
-
-  const query = 'UPDATE Clientes SET nome = ?, sobrenome = ?, cpf = ?, rgNumero = ?, rgDataExpedicao = ?, dataNascimento = ?, sexo = ?, cnpj = ?, inscricaoEstadual = ?, receberNotificacoes = ?, receberInformativos = ?, situacao = ?, situacaoMotivo = ?, observacaoInterna = ?, email = ?, senha = ? WHERE idCliente = ?';
-  banco.conn.query(query, [nome, sobrenome, cpf, rgNumero, rgDataExpedicao, dataNascimento, sexo, cnpj, inscricaoEstadual, receberNotificacoes, receberInformativos, situacao, situacaoMotivo, observacaoInterna, email, senha, clienteID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o cliente.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
-  });
-});
-
-// Deletar um cliente pelo ID:
-app.delete('/clientes/:clienteID', verifyJWT, (req, res) => {
-  const clienteID = req.params.clienteID;
-
-  const query = 'DELETE FROM Clientes WHERE idCliente = ?';
-  banco.conn.query(query, [clienteID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o cliente.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Cliente deletado com sucesso.' });
-  });
-});
-
-// !CLIENTES
 
 
 // CREATE TABLE Grupos
@@ -1847,7 +1479,6 @@ function verifyJWT(req, res, next) {
 
 
 
-///         se tiver uma porta, usa , senão: 3000
 const portaNode = process.env.API_PORT || 3000
 
 app.listen(3000, function () {
@@ -1856,4 +1487,3 @@ app.listen(3000, function () {
 
 
 
-// banco.conn.testar();
