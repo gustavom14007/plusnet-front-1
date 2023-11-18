@@ -1,0 +1,23 @@
+footer {
+  color: #b3b3b3;
+  font-size: 14px;
+  text-align: center;
+  padding: 32px;
+  background: #222;
+  display: block;
+  
+
+}
+  strong {
+    color:#b3b3b3;
+  }
+
+  .footer-links {
+    margin-bottom: 24px;
+
+  }
+
+    a {
+      margin: 0 8px;
+      color: #b3b3b3;
+    }

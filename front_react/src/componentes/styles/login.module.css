@@ -1,0 +1,183 @@
+.formulario_container {
+  display: flex;
+  justify-content: center;
+  background-color: #850f00;
+  height: 100vh;
+  /* padding: 4rem 0; */
+}
+
+.lista_menus {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #222;
+  border: 1px solid #222;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+  gap: 20px;
+}
+
+.lista_menus a {
+  font-size: 20px;
+  padding: 1rem 3em;
+  cursor: pointer;
+  color: #222;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.lista_menus a:hover {
+  color: #ffbb22;
+}
+
+.titulo_formulario {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff;
+  
+}
+
+.subtitulo_formulario span {
+  color: #04709f;
+  text-decoration: underline;
+}
+
+.card_formulario_container {
+  display: flex;
+  flex-direction: column;
+  color: #222;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.informacoes_formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 11px;
+}
+
+.informacoes_formulario input,
+.nacionalidade_formulario,
+.genero_formulario {
+  border-radius: 10px;
+  border: 1px solid #222;
+  outline: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 233px;
+}
+
+.genero_formulario {
+  display: flex;
+  flex-direction: column;
+}
+
+.button_formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button_formulario button,
+.conta_formulario button {
+  width: 100%;
+  height: 40px;
+  background-color: #000000;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.6s ease-in-out;
+}
+
+.button_formulario:hover button {
+  background-color: #222;
+  color: #ffffff;
+}
+
+.conta_formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2em;
+  gap: 20px;
+}
+
+.conta_formulario span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #afafaf;
+}
+
+.conta_formulario:hover button {
+  background-color: #222;
+  color: #ffffff;
+}
+
+.conta_formulario button {
+  padding: 0 1em;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.error_mensagem {
+  color: red;
+}
+
+.label_error {
+  color: red;
+}
+
+.cadastre_se span {
+color: #222;
+text-decoration: underline;
+cursor: pointer;
+}
+
+/* Adicione este bloco ao seu arquivo CSS */
+.modal_sucesso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal_sucesso_content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal_sucesso_content span {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.modal_sucesso_content button {
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
