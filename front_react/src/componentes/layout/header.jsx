@@ -33,23 +33,12 @@ function Header() {
         }`}
       >
         <div className={styles.header_menus}>
-        <Link to="/pedidos">
-          <li className={styles.item}>Pedidos</li>
-        </Link>
-
-        <Link to="/fechamento">
-          <li className={styles.item}>Fechamento</li>
-        </Link>
-
-        <Link to="/relatorios">
-          <li className={styles.item}>Relatórios</li>
-        </Link>
-
+        
         </div>
 
         
-        <Link to="/login">
-          <li className={styles.item}>Login</li>
+        <Link to="/carrinho">
+          <li className={styles.item}>Carrinho</li>
         </Link>
         
         

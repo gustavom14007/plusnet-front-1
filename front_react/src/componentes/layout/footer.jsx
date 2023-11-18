@@ -11,19 +11,19 @@ function Footer() {
           href="https://github.com/sivadass/react-shopping-cart"
           target="_blank"
         >
-          View Source on Github
+          Plusnet
         </a>
         <span> / </span>
         <a href="mailto:contact@sivadass.in" target="_blank">
-          Need any help?
+          Plusnet
         </a>
         <span> / </span>
         <a href="https://twitter.com/NSivadass" target="_blank">
-          Say Hi on Twitter
+          Plusnet
         </a>
         <span> / </span>
         <a href="https://sivadass.in" target="_blank">
-          Read My Blog
+          Plusnet
         </a>
       </p>
       <p>

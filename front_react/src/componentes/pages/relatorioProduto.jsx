@@ -132,15 +132,7 @@ function RelatorioProduto() {
         <h1>Produtos</h1>
       </div>
 
-      <div className={styles.div_adicionar}>
-        <button
-          className={styles.botao_adicionar}
-          onClick={handleAbrirModalCadastro}
-        >
-          Adicionar Produto
-        </button>
-      </div>
-
+      
       <div className={styles.div_relatorio}>
         <ul className={styles.ul_cards}>
           {produtos.map((produto) => (
@@ -155,17 +147,12 @@ function RelatorioProduto() {
                 <strong>Valor:</strong> {produto.valor}
               </p>
               <div className={styles.buttons}>
-                <button
-                  className={styles.button_cards}
-                  onClick={() => handleExcluirClick(produto)}
-                >
-                  Excluir
-                </button>
+                
                 <button
                   className={styles.button2_cards}
                   onClick={() => handleEditarClick(produto)}
                 >
-                  Editar
+                  Comprar
                 </button>
               </div>
             </li>

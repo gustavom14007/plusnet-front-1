@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #222;
+  background-color: #e9e9e9;
   padding: 10px;
   font-size: 18px;
   position: relative;
@@ -13,10 +13,7 @@
   align-items: center;
 }
 
-.logo_container img {
-  width: 90px;
-  height: 90px;
-}
+
 
 .lista_header {
   display: flex;
@@ -34,19 +31,19 @@
 .item {
   display: flex;
   align-items: center;
-  color: #fff;
+  color: #007bff;
   font-weight: bold;
   cursor: pointer;
 }
 
 .item:hover {
-  background-color: #222;
-  color: #ffbb33;
+
+  color: #67b500;
 }
 
 .mobile_menu_icon {
   display: none;
-  color: #fff;
+  color: #007bff;
   font-size: 24px;
   cursor: pointer;
 }
@@ -61,12 +58,13 @@
   }
 
   .lista_header {
+    color: #007bff;
     display: none;
     flex-direction: column;
     position: absolute;
-    top: 60px;
+    top: 45px;
     right: 0;
-    background-color: #222;
+    background-color: #e9e9e9;
     width: 100%;
     margin-top: 53px;
     padding-bottom: 20px;

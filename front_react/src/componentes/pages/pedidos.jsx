@@ -76,17 +76,10 @@ function Pedidos() {
   return (
     <div className={styles.formulario_container}>
       <div className={styles.titulo_formulario}>
-        <h1>Pedidos</h1>
+        <h1>Produtos</h1>
       </div>
 
-      <div className={styles.div_adicionar}>
-        <button
-          className={styles.botao_adicionar}
-          onClick={handleAbrirModalCadastro}
-        >
-          Fechar pedido
-        </button>
-      </div>
+      
 
       <div className={styles.div_relatorio}>
         <ul className={styles.ul_cards}>
@@ -103,13 +96,13 @@ function Pedidos() {
               </p>
               <div className={styles.buttons}>
                 <button
-                  className={styles.button_cards}
+                  className={styles.button2_cards}
                   onClick={() => {
                     setProdutoSelecionado(produto);
                     setIsMensagemVisivel(true); // Mostrar a mensagem ao clicar no botão
                   }}
                 >
-                  Adicionar ao Pedido
+                  Adicionar ao carrinho
                 </button>
               </div>
             </li>
