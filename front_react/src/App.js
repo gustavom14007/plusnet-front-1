@@ -15,7 +15,7 @@ import RelatorioFuncionario from "./componentes/pages/relatorioFuncionario";
 import RelatorioPedido from "./componentes/pages/relatorioPedido";
 import Home from "./componentes/pages/home";
 import RelatorioProducao from "./componentes/pages/relatorioProducao";
-import Fechamento from "./componentes/pages/fechamento";
+import Carrinho from "./componentes/pages/carrinho";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
         <Route exact path="/relatorioPedido" element={<RelatorioPedido/>}/>
         <Route exact path="/relatorioProducao" element={<RelatorioProducao/>}/>
         <Route exact path="/home" element={<Home/>}/>
-        <Route exact path="/fechamento" element={<Fechamento/>}/>
+        <Route exact path="/carrinho" element={<Carrinho/>}/>
       </Routes>
     
       <Footer/>

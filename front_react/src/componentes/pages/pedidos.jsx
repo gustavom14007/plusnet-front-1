@@ -7,6 +7,11 @@ function Pedidos() {
   const [quantidadeProduto, setQuantidadeProduto] = useState(1);
   const [isModalAberto, setIsModalAberto] = useState(false);
   const [erroCarregamento, setErroCarregamento] = useState(null);
+  const [CarrinhoID, setCarrinhoID] = useState(() => {
+    // Verifica se há um CarrinhoID no localStorage
+    const localCarrinhoID = localStorage.getItem("CarrinhoID");
+    return localCarrinhoID ? localCarrinhoID : null;
+  });
 
   useEffect(() => {
     fetch("http://localhost:3000/produtos/produtos")
@@ -18,6 +23,7 @@ function Pedidos() {
       })
       .then((data) => {
         console.log("Dados recebidos:", data);
+       
         setProdutos(data.data.products); // Ajuste aqui para refletir a estrutura dos dados
       })
       .catch((err) => {
@@ -35,26 +41,41 @@ function Pedidos() {
     }
   
     // Lógica para adicionar ao carrinho
-    fetch("http://localhost:3000/adicionarAoCarrinho", {
+    fetch("http://localhost:3000/carrinhoFuncional/adicionarAoCarrinho", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        produtoID: produtoSelecionado.id,
-        quantidade: quantidadeProduto,
-      }),
+      body: JSON.stringify(
+        CarrinhoID
+          ? {
+              produtoID: produtoSelecionado.id,
+              quantidade: quantidadeProduto,
+              carrinhoID: CarrinhoID,
+            }
+          : {
+              produtoID: produtoSelecionado.id,
+              quantidade: quantidadeProduto,
+            }
+      ),
     })
       .then((resp) => {
         if (!resp.ok) {
           throw new Error("Erro ao adicionar ao carrinho.");
         }
+
         return resp.json();
       })
       .then((data) => {
         console.log("Resposta da API:", data); // Adicione este log para verificar a resposta da API
         // Lógica adicional, se necessário
         alert("Produto adicionado ao carrinho com sucesso!");
+    // Verifica se há CarrinhoID na resposta da API e, se não existir no estado, atualiza o estado
+    if (data.carrinhoID && !CarrinhoID) {
+      setCarrinhoID(data.carrinhoID);
+      // Salva o CarrinhoID no localStorage para uso futuro
+      localStorage.setItem("CarrinhoID", data.carrinhoID);
+    }
         setIsModalAberto(false);
         // Adicionar lógica de sucesso ou tratamento de erro, se necessário
       })

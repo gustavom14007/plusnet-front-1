@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/relatorioCliente.module.css";
 
-function Fechamento() {
+function Carrinho() {
   const [producao, setProducao] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [quantidadePessoas, setQuantidadePessoas] = useState(1);
@@ -28,9 +28,9 @@ function Fechamento() {
     setPedidoId(pedidoId);
   };
 
-  const handleConfirmarFechamento = () => {
+  const handleConfirmarCarrinho = () => {
     // Lógica para obter o valor por pessoa após o clique em "Confirmar"
-    fetch(`http://localhost:5000/pedidos/${pedidoId}/fechamento`, {
+    fetch(`http://localhost:5000/pedidos/${pedidoId}/Carrinho`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,9 +55,9 @@ function Fechamento() {
   
   
 
-  const handleFinalizarFechamento = () => {
-    // Lógica para finalizar o fechamento, atualizar o status do pedido, etc.
-    fetch(`http://localhost:5000/pedidos/${pedidoId}/fechamento`, {
+  const handleFinalizarCarrinho = () => {
+    // Lógica para finalizar o Carrinho, atualizar o status do pedido, etc.
+    fetch(`http://localhost:5000/pedidos/${pedidoId}/Carrinho`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,14 +76,14 @@ function Fechamento() {
         setValorPorPessoa(null);
         setPedidoId(null);
         setQuantidadePessoas(1);
-        window.location.reload(); // Recarregar a página após finalizar o fechamento
+        window.location.reload(); // Recarregar a página após finalizar o Carrinho
       })
       .catch((err) => console.log(err));
   };
   
   
 
-  const handleCancelarFechamento = () => {
+  const handleCancelarCarrinho = () => {
     setModalAberto(false);
     setPedidoId(null);
     setValorPorPessoa(null);
@@ -93,7 +93,7 @@ function Fechamento() {
   return (
     <div className={styles.formulario_container}>
       <div className={styles.titulo_formulario}>
-        <h1>Fechamento</h1>
+        <h1>Carrinho</h1>
       </div>
 
       <div className={styles.div_relatorio}>
@@ -137,14 +137,14 @@ function Fechamento() {
           />
           <p></p>
           <div className={styles.modal_botoes}>
-            <button onClick={handleConfirmarFechamento}>Confirmar</button>
-            <button onClick={handleCancelarFechamento}>Cancelar</button>
+            <button onClick={handleConfirmarCarrinho}>Confirmar</button>
+            <button onClick={handleCancelarCarrinho}>Cancelar</button>
           </div>
           {valorPorPessoa !== null && (
             <>
               <p>Valor por pessoa: R$ {valorPorPessoa.toFixed(2)}</p>
               <div className={styles.modal_botoes}>
-              <button onClick={handleFinalizarFechamento} >Finalizar</button>
+              <button onClick={handleFinalizarCarrinho} >Finalizar</button>
               </div>
             </>
           )}
@@ -154,4 +154,4 @@ function Fechamento() {
   );
 }
 
-export default Fechamento;
+export default Carrinho;
