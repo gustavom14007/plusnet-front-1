@@ -58,6 +58,90 @@ app.use('/clientes', clienteRoutes);
 
 
 
+const grupoRoutes = require('./routes/grupoRoutes');
+
+// Usando as rotas
+app.use('/grupos', grupoRoutes);
+
+
+
+const marcaRoutes = require('./routes/marcaRoutes');
+
+// Usando as rotas
+app.use('/marcas', marcaRoutes);
+
+
+const varianteRoutes = require('./routes/varianteRoutes');
+
+// Usando as rotas
+app.use('/variantes', varianteRoutes);
+
+
+
+const atributoRoutes = require('./routes/atributoRoutes');
+
+// Usando as rotas
+app.use('/atributos', atributoRoutes);
+
+
+const valorAtributoRoutes = require('./routes/valorAtributoRoutes');
+
+// Usando as rotas
+app.use('/valorAtributos', valorAtributoRoutes);
+
+
+const carrinhoRoutes = require('./routes/carrinhoRoutes');
+
+// Usando as rotas
+app.use('/carrinhos', carrinhoRoutes);
+
+
+const carrinhoProdutoVarianteRoutes = require('./routes/carrinhoProdutoVarianteRoutes');
+
+// Usando as rotas
+app.use('/carrinhoProdutoVariantes', carrinhoProdutoVarianteRoutes);
+
+
+const pedidoClienteRoutes = require('./routes/pedidoClienteRoutes');
+
+// Usando as rotas
+app.use('/pedidoClientes', pedidoClienteRoutes);
+
+
+
+
+const entregaRoutes = require('./routes/entregaRoutes');
+
+// Usando as rotas
+app.use('/entregas', entregaRoutes);
+
+
+
+
+
+const entregaPedidoRoutes = require('./routes/entregaPedidoRoutes');
+
+// Usando as rotas
+app.use('/entregaPedidos', entregaPedidoRoutes);
+
+
+
+const pedidoRoutes = require('./routes/pedidoRoutes');
+
+// Usando as rotas
+app.use('/pedidos', pedidoRoutes);
+
+
+
+
+const pedidoProdutoVariantesRoutes = require('./routes/pedidoProdutoVarianteRoutes');
+
+// Usando as rotas
+app.use('/pedidoProdutoVariantes', pedidoProdutoVariantesRoutes);
+
+
+
+
 
 
 
@@ -303,334 +387,78 @@ app.get('/listarPedidos', async (req, res) => {
 
 
 
-// CREATE TABLE Grupos
-// !GRUPOS
-// Inserir um novo grupo:
-app.post('/grupos', verifyJWT, (req, res) => {
-  const { grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao, idLoja } = req.body;
 
-  const query = 'INSERT INTO Grupos (grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao, idLoja) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  banco.conn.query(query, [grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao, idLoja], (err, results) => {
+
+
+
+
+
+
+
+// CREATE TABLE EnderecoCliente
+// !EnderecoCliente
+// Inserir um novo registro em EnderecoCliente(relacionando um cliente a um endereço):
+app.post('/enderecoCliente', verifyJWT, (req, res) => {
+  const { idEndereco, idCliente } = req.body;
+
+  const query = 'INSERT INTO EnderecoCliente (idEndereco, idCliente) VALUES (?, ?)';
+  banco.conn.query(query, [idEndereco, idCliente], (err, results) => {
     if (err) {
       console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar grupo.' });
+      res.status(500).json({ error: 'Erro ao relacionar cliente ao endereço.' });
       return;
     }
 
-    res.status(201).json({ message: 'Grupo cadastrado com sucesso.', group: { id: results.insertId, grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao, idLoja } });
+    res.status(201).json({ message: 'Cliente relacionado ao endereço com sucesso.' });
   });
 });
 
-// Listar todos os grupos:
-app.get('/grupos', (req, res) => {
-  const query = 'SELECT * FROM Grupos';
+// Listar todos os registros em EnderecoCliente:
+app.get('/enderecoCliente', verifyJWT, (req, res) => {
+  const query = 'SELECT * FROM EnderecoCliente';
   banco.conn.query(query, (err, results) => {
     if (err) {
       console.log(err);
-      res.status(500).json({ error: 'Erro ao listar grupos.' });
+      res.status(500).json({ error: 'Erro ao listar os registros de EnderecoCliente.' });
       return;
     }
 
-    res.status(200).json({ groups: results });
+    res.status(200).json({ addressClients: results });
   });
 });
 
-// Atualizar um grupo pelo ID:
-app.put('/grupos/:grupoID', verifyJWT, (req, res) => {
-  const grupoID = req.params.grupoID;
-  const { grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao } = req.body;
+// Deletar um registro em EnderecoCliente pelo ID do Endereço e ID do Cliente:
+app.delete('/enderecoCliente/:idEndereco/:idCliente', verifyJWT, (req, res) => {
+  const idEndereco = req.params.idEndereco;
+  const idCliente = req.params.idCliente;
 
-  const query = 'UPDATE Grupos SET grupoPai = ?, nome = ?, identificadorERP = ?, descricao = ?, seoHtmlTitle = ?, seoHtmlMetaDescription = ?, seoHtmlMetaKeywords = ?, seoHtmlAbstract = ?, seoHtmlHead = ?, filtroDeMarca = ?, situacao = ? WHERE idGrupo = ?';
-  banco.conn.query(query, [grupoPai, nome, identificadorERP, descricao, seoHtmlTitle, seoHtmlMetaDescription, seoHtmlMetaKeywords, seoHtmlAbstract, seoHtmlHead, filtroDeMarca, situacao, grupoID], (err, results) => {
+  const query = 'DELETE FROM EnderecoCliente WHERE idEndereco = ? AND idCliente = ?';
+  banco.conn.query(query, [idEndereco, idCliente], (err, results) => {
     if (err) {
       console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o grupo.' });
+      res.status(500).json({ error: 'Erro ao deletar o registro em EnderecoCliente.' });
       return;
     }
 
-    res.status(200).json({ message: 'Grupo atualizado com sucesso.' });
+    res.status(200).json({ message: 'Registro em EnderecoCliente deletado com sucesso.' });
   });
 });
 
-// Deletar um grupo pelo ID:
-app.delete('/grupos/:grupoID', verifyJWT, (req, res) => {
-  const grupoID = req.params.grupoID;
 
-  const query = 'DELETE FROM Grupos WHERE idGrupo = ?';
-  banco.conn.query(query, [grupoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o grupo.' });
-      return;
-    }
+// !EnderecoCliente
 
-    res.status(200).json({ message: 'Grupo deletado com sucesso.' });
-  });
-});
-// !GRUPOS
 
-// CREATE TABLE Marcas
-// !MARCAS
-// Inserir uma nova marca:
-app.post('/marcas', verifyJWT, (req, res) => {
-  const { urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao, idLoja } = req.body;
 
-  const query = 'INSERT INTO Marcas (urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao, idLoja) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-  banco.conn.query(query, [urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao, idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar marca.' });
-      return;
-    }
 
-    res.status(201).json({ message: 'Marca cadastrada com sucesso.', brand: { id: results.insertId, urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao, idLoja } });
-  });
-});
 
-// Listar todas as marcas:
-app.get('/marcas', (req, res) => {
-  const query = 'SELECT * FROM Marcas';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar marcas.' });
-      return;
-    }
 
-    res.status(200).json({ brands: results });
-  });
-});
 
-// Atualizar uma marca pelo ID:
-app.put('/marcas/:marcaID', verifyJWT, (req, res) => {
-  const marcaID = req.params.marcaID;
-  const { urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao } = req.body;
 
-  const query = 'UPDATE Marcas SET urlDe = ?, urlPara = ?, tipo = ?, dataHoraInicial = ?, dataHoraFinal = ?, horaInicial = ?, horaFinal = ?, situacao = ? WHERE idMarca = ?';
-  banco.conn.query(query, [urlDe, urlPara, tipo, dataHoraInicial, dataHoraFinal, horaInicial, horaFinal, situacao, marcaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar a marca.' });
-      return;
-    }
 
-    res.status(200).json({ message: 'Marca atualizada com sucesso.' });
-  });
-});
-// 
-// Deletar uma marca pelo ID:
-app.delete('/marcas/:marcaID', verifyJWT, (req, res) => {
-  const marcaID = req.params.marcaID;
 
-  const query = 'DELETE FROM Marcas WHERE idMarca = ?';
-  banco.conn.query(query, [marcaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar a marca.' });
-      return;
-    }
 
-    res.status(200).json({ message: 'Marca deletada com sucesso.' });
-  });
-});
-// !MARCAS
 
-// CREATE TABLE Variantes
-// !VARIANTES
-// Tabela de Variantes
-// Inserir uma nova variante:
-app.post('/variantes', verifyJWT, (req, res) => {
-  const { idProduto, quantidade } = req.body;
 
-  const query = 'INSERT INTO Variantes (idProduto, quantidade) VALUES (?, ?)';
-  banco.conn.query(query, [idProduto, quantidade], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar variante.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Variante cadastrada com sucesso.', variant: { id: results.insertId, idProduto, quantidade } });
-  });
-});
-// Listar todas as variantes:
-app.get('/variantes', (req, res) => {
-  const query = 'SELECT * FROM Variantes';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar variantes.' });
-      return;
-    }
-
-    res.status(200).json({ variants: results });
-  });
-});
-// Atualizar uma variante pelo ID:
-app.put('/variantes/:varianteID', verifyJWT, (req, res) => {
-  const varianteID = req.params.varianteID;
-  const { quantidade } = req.body;
-
-  const query = 'UPDATE Variantes SET quantidade = ? WHERE idVariante = ?';
-  banco.conn.query(query, [quantidade, varianteID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar a variante.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Variante atualizada com sucesso.' });
-  });
-});
-// Deletar uma variante pelo ID:
-app.delete('/variantes/:varianteID', verifyJWT, (req, res) => {
-  const varianteID = req.params.varianteID;
-
-  const query = 'DELETE FROM Variantes WHERE idVariante = ?';
-  banco.conn.query(query, [varianteID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar a variante.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Variante deletada com sucesso.' });
-  });
-});
-// !VARIANTES
-
-// CREATE TABLE Atributos
-//!ATRIBUTOS
-// Inserir um novo atributo:
-app.post('/atributos', verifyJWT, (req, res) => {
-  const { idVariante, valorAtributo } = req.body;
-
-  const query = 'INSERT INTO Atributos (idVariante, valorAtributo) VALUES (?, ?)';
-  banco.conn.query(query, [idVariante, valorAtributo], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar atributo.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Atributo cadastrado com sucesso.', attribute: { id: results.insertId, idVariante, valorAtributo } });
-  });
-});
-
-// Listar todos os atributos:
-app.get('/atributos', (req, res) => {
-  const query = 'SELECT * FROM Atributos';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar atributos.' });
-      return;
-    }
-
-    res.status(200).json({ attributes: results });
-  });
-});
-
-// Atualizar um atributo pelo ID:
-app.put('/atributos/:atributoID', verifyJWT, (req, res) => {
-  const atributoID = req.params.atributoID;
-  const { valorAtributo } = req.body;
-
-  const query = 'UPDATE Atributos SET valorAtributo = ? WHERE idAtributo = ?';
-  banco.conn.query(query, [valorAtributo, atributoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o atributo.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Atributo atualizado com sucesso.' });
-  });
-});
-
-// Deletar um atributo pelo ID:
-app.delete('/atributos/:atributoID', verifyJWT, (req, res) => {
-  const atributoID = req.params.atributoID;
-
-  const query = 'DELETE FROM Atributos WHERE idAtributo = ?';
-  banco.conn.query(query, [atributoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o atributo.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Atributo deletado com sucesso.' });
-  });
-});
-
-//!ATRIBUTOS
-
-// CREATE TABLE Valor_Atributo
-// !valor_atributo
-// Inserir um novo valor de atributo:
-app.post('/valorAtributo', verifyJWT, (req, res) => {
-  const { idAtributo, texto } = req.body;
-
-  const query = 'INSERT INTO Valor_Atributo (idAtributo, texto) VALUES (?, ?)';
-  banco.conn.query(query, [idAtributo, texto], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar valor de atributo.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Valor de atributo cadastrado com sucesso.', attributeValue: { id: results.insertId, idAtributo, texto } });
-  });
-});
-
-// Listar todos os valores de atributo:
-app.get('/valorAtributo', (req, res) => {
-  const query = 'SELECT * FROM Valor_Atributo';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar valores de atributo.' });
-      return;
-    }
-
-    res.status(200).json({ attributeValues: results });
-  });
-});
-
-// Atualizar um valor de atributo pelo ID:
-app.put('/valorAtributo/:valorAtributoID', verifyJWT, (req, res) => {
-  const valorAtributoID = req.params.valorAtributoID;
-  const { texto } = req.body;
-
-  const query = 'UPDATE Valor_Atributo SET texto = ? WHERE idValorAtributo = ?';
-  banco.conn.query(query, [texto, valorAtributoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o valor de atributo.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Valor de atributo atualizado com sucesso.' });
-  });
-});
-
-// Deletar um valor de atributo pelo ID:
-app.delete('/valorAtributo/:valorAtributoID', verifyJWT, (req, res) => {
-  const valorAtributoID = req.params.valorAtributoID;
-
-  const query = 'DELETE FROM Valor_Atributo WHERE idValorAtributo = ?';
-  banco.conn.query(query, [valorAtributoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o valor de atributo.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Valor de atributo deletado com sucesso.' });
-  });
-});
-// !valor_atributo
 
 // CREATE TABLE Grupo_Subgrupo
 // !Grupo_Subgrupo
@@ -857,532 +685,10 @@ app.put('/grupoProduto/:idGrupo/:idProduto', verifyJWT, (req, res) => {
 });
 // !Grupo_Produto
 
-// CREATE TABLE Pedidos
-// !Pedidos
-// Inserir um novo pedido:
-// 
-app.post('/pedidos', verifyJWT, (req, res) => {
-  const { quantidade, valorTotal, idLoja } = req.body;
 
-  const query = 'INSERT INTO Pedidos (quantidade, valorTotal, idLoja) VALUES (?, ?, ?)';
-  banco.conn.query(query, [quantidade, valorTotal, idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar pedido.' });
-      return;
-    }
 
-    res.status(201).json({ message: 'Pedido cadastrado com sucesso.', order: { id: results.insertId, quantidade, valorTotal, idLoja } });
-  });
-});
 
-// Listar todos os pedidos:
-app.get('/pedidos', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Pedidos';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar pedidos.' });
-      return;
-    }
 
-    res.status(200).json({ orders: results });
-  });
-});
-
-// Atualizar um pedido pelo ID:
-app.put('/pedidos/:pedidoID', verifyJWT, (req, res) => {
-  const pedidoID = req.params.pedidoID;
-  const { quantidade, valorTotal } = req.body;
-
-  const query = 'UPDATE Pedidos SET quantidade = ?, valorTotal = ? WHERE idPedido = ?';
-  banco.conn.query(query, [quantidade, valorTotal, pedidoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o pedido.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Pedido atualizado com sucesso.' });
-  });
-});
-
-// Deletar um pedido pelo ID:
-app.delete('/pedidos/:pedidoID', verifyJWT, (req, res) => {
-  const pedidoID = req.params.pedidoID;
-
-  const query = 'DELETE FROM Pedidos WHERE idPedido = ?';
-  banco.conn.query(query, [pedidoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o pedido.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Pedido deletado com sucesso.' });
-  });
-});
-// !Pedidos
-
-// CREATE TABLE Pedido_Produto_Variante
-// !Pedido_Produto_Variante
-// Inserir um novo registro em Pedido_Produto_Variante(relacionando um produto variante a um pedido):
-
-app.post('/pedidoProdutoVariante', verifyJWT, (req, res) => {
-  const { idProduto, idVariante, idPedido } = req.body;
-
-  const query = 'INSERT INTO Pedido_Produto_Variante (idProduto, idVariante, idPedido) VALUES (?, ?, ?)';
-  banco.conn.query(query, [idProduto, idVariante, idPedido], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao relacionar produto variante ao pedido.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Produto variante relacionado ao pedido com sucesso.' });
-  });
-});
-
-// Listar todos os registros em Pedido_Produto_Variante:
-app.get('/pedidoProdutoVariante', (req, res) => {
-  const query = 'SELECT * FROM Pedido_Produto_Variante';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar os registros de Pedido_Produto_Variante.' });
-      return;
-    }
-
-    res.status(200).json({ orderProductVariants: results });
-  });
-});
-
-// Atualizar um registro em Pedido_Produto_Variante pelo ID do Pedido e ID da Variante:
-app.put('/pedidoProdutoVariante/:idPedido/:idVariante', verifyJWT, (req, res) => {
-  const idPedido = req.params.idPedido;
-  const idVariante = req.params.idVariante;
-  const { idProduto } = req.body;
-
-  const query = 'UPDATE Pedido_Produto_Variante SET idProduto = ? WHERE idPedido = ? AND idVariante = ?';
-  banco.conn.query(query, [idProduto, idPedido, idVariante], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o registro em Pedido_Produto_Variante.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Registro em Pedido_Produto_Variante atualizado com sucesso.' });
-  });
-});
-
-// Deletar um registro em Pedido_Produto_Variante pelo ID do Pedido e ID da Variante:
-app.delete('/pedidoProdutoVariante/:idPedido/:idVariante', verifyJWT, (req, res) => {
-  const idPedido = req.params.idPedido;
-  const idVariante = req.params.idVariante;
-
-  const query = 'DELETE FROM Pedido_Produto_Variante WHERE idPedido = ? AND idVariante = ?';
-  banco.conn.query(query, [idPedido, idVariante], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o registro em Pedido_Produto_Variante.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Registro em Pedido_Produto_Variante deletado com sucesso.' });
-  });
-});
-// !Pedido_Produto_Variante
-
-// CREATE TABLE EnderecoCliente
-// !EnderecoCliente
-// Inserir um novo registro em EnderecoCliente(relacionando um cliente a um endereço):
-app.post('/enderecoCliente', verifyJWT, (req, res) => {
-  const { idEndereco, idCliente } = req.body;
-
-  const query = 'INSERT INTO EnderecoCliente (idEndereco, idCliente) VALUES (?, ?)';
-  banco.conn.query(query, [idEndereco, idCliente], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao relacionar cliente ao endereço.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Cliente relacionado ao endereço com sucesso.' });
-  });
-});
-
-// Listar todos os registros em EnderecoCliente:
-app.get('/enderecoCliente', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM EnderecoCliente';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar os registros de EnderecoCliente.' });
-      return;
-    }
-
-    res.status(200).json({ addressClients: results });
-  });
-});
-
-// Deletar um registro em EnderecoCliente pelo ID do Endereço e ID do Cliente:
-app.delete('/enderecoCliente/:idEndereco/:idCliente', verifyJWT, (req, res) => {
-  const idEndereco = req.params.idEndereco;
-  const idCliente = req.params.idCliente;
-
-  const query = 'DELETE FROM EnderecoCliente WHERE idEndereco = ? AND idCliente = ?';
-  banco.conn.query(query, [idEndereco, idCliente], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o registro em EnderecoCliente.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Registro em EnderecoCliente deletado com sucesso.' });
-  });
-});
-
-
-// !EnderecoCliente
-
-// CREATE TABLE Pedido_Cliente
-// !Pedido_Cliente
-
-// Inserir um novo registro em Pedidos_Cliente(relacionando um cliente a um pedido):
-app.post('/pedidosCliente', verifyJWT, (req, res) => {
-  const { idPedido, idCliente } = req.body;
-
-  const query = 'INSERT INTO Pedido_Cliente (idPedido, idCliente) VALUES (?, ?)';
-  banco.conn.query(query, [idPedido, idCliente], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao relacionar cliente ao pedido.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Cliente relacionado ao pedido com sucesso.' });
-  });
-});
-
-// Listar todos os registros em Pedidos_Cliente:
-app.get('/pedidosCliente', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Pedido_Cliente';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar os registros de Pedidos_Cliente.' });
-      return;
-    }
-
-    res.status(200).json({ orderClients: results });
-  });
-});
-
-// Deletar um registro em Pedidos_Cliente pelo ID do Pedido e ID do Cliente:
-// 
-app.delete('/pedidosCliente/:idPedido/:idCliente', verifyJWT, (req, res) => {
-  const idPedido = req.params.idPedido;
-  const idCliente = req.params.idCliente;
-
-  const query = 'DELETE FROM Pedido_Cliente WHERE idPedido = ? AND idCliente = ?';
-  banco.conn.query(query, [idPedido, idCliente], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o registro em Pedidos_Cliente.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Registro em Pedidos_Cliente deletado com sucesso.' });
-  });
-});
-
-
-// !Pedido_Cliente
-
-// CREATE TABLE Entregas
-// !Entregas
-
-// Inserir uma nova entrega:
-app.post('/entregas', (req, res) => {
-  const { idLoja } = req.body;
-
-  const query = 'INSERT INTO Entregas (idLoja) VALUES (?)';
-  banco.conn.query(query, [idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar entrega.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Entrega cadastrada com sucesso.', delivery: { id: results.insertId, idLoja } });
-  });
-});
-
-// Listar todas as entregas:
-app.get('/entregas', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Entregas';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar entregas.' });
-      return;
-    }
-
-    res.status(200).json({ deliveries: results });
-  });
-});
-
-// Atualizar uma entrega pelo ID:
-app.put('/entregas/:entregaID', verifyJWT, (req, res) => {
-  const entregaID = req.params.entregaID;
-  const { idLoja } = req.body;
-
-  const query = 'UPDATE Entregas SET idLoja = ? WHERE idEntrega = ?';
-  banco.conn.query(query, [idLoja, entregaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar a entrega.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Entrega atualizada com sucesso.' });
-  });
-});
-
-// Deletar uma entrega pelo ID:
-app.delete('/entregas/:entregaID', verifyJWT, (req, res) => {
-  const entregaID = req.params.entregaID;
-
-  const query = 'DELETE FROM Entregas WHERE idEntrega = ?';
-  banco.conn.query(query, [entregaID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar a entrega.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Entrega deletada com sucesso.' });
-  });
-});
-
-// !Entregas
-
-// CREATE TABLE Entrega_Pedido 
-// !Entrega_Pedido 
-// Inserir uma nova relação Entrega - Pedido:
-app.post('/entregaPedido', verifyJWT, (req, res) => {
-  const { idEntrega, idPedido } = req.body;
-
-  const query = 'INSERT INTO Entrega_Pedido (idEntrega, idPedido) VALUES (?, ?)';
-  banco.conn.query(query, [idEntrega, idPedido], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao criar a relação Entrega-Pedido.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Relação Entrega-Pedido criada com sucesso.' });
-  });
-});
-
-// Listar todas as relações Entrega-Pedido:
-app.get('/entregaPedido', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Entrega_Pedido';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar as relações Entrega-Pedido.' });
-      return;
-    }
-
-    res.status(200).json({ relationships: results });
-  });
-});
-
-// Deletar uma relação Entrega-Pedido pelo ID da Entrega e do Pedido:
-app.delete('/entregaPedido/:idEntrega/:idPedido', verifyJWT, (req, res) => {
-  const idEntrega = req.params.idEntrega;
-  const idPedido = req.params.idPedido;
-
-  const query = 'DELETE FROM Entrega_Pedido WHERE idEntrega = ? AND idPedido = ?';
-  banco.conn.query(query, [idEntrega, idPedido], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar a relação Entrega-Pedido.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Relação Entrega-Pedido deletada com sucesso.' });
-  });
-});
-
-// Atualizar uma relação Entrega-Pedido pelo ID da Entrega e do Pedido:
-app.put('/entregaPedido/:idEntrega/:idPedido', verifyJWT, (req, res) => {
-  const idEntrega = req.params.idEntrega;
-  const idPedido = req.params.idPedido;
-  const { novoIdEntrega, novoIdPedido } = req.body;
-
-  // Verifique se a relação Entrega-Pedido existente está sendo atualizada para novos valores
-  if (!novoIdEntrega || !novoIdPedido) {
-    res.status(400).json({ error: 'É necessário fornecer novos valores para a atualização.' });
-    return;
-  }
-
-  const query = 'UPDATE Entrega_Pedido SET idEntrega = ?, idPedido = ? WHERE idEntrega = ? AND idPedido = ?';
-  banco.conn.query(query, [novoIdEntrega, novoIdPedido, idEntrega, idPedido], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar a relação Entrega-Pedido.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Relação Entrega-Pedido atualizada com sucesso.' });
-  });
-});
-
-// !Entrega_Pedido 
-
-// create table carrinhos 
-// !carrinhos
-
-// Inserir um novo carrinho:
-app.post('/carrinhos', verifyJWT, (req, res) => {
-  const { idCliente, dataPublicacao, dataAtualizacao, idLoja } = req.body;
-
-  const query = 'INSERT INTO Carrinhos (idCliente, dataPublicacao, dataAtualizacao, idLoja) VALUES (?, ?, ?, ?)';
-  banco.conn.query(query, [idCliente, dataPublicacao, dataAtualizacao, idLoja], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao cadastrar carrinho.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Carrinho cadastrado com sucesso.', cart: { id: results.insertId, idCliente, dataPublicacao, dataAtualizacao, idLoja } });
-  });
-});
-
-// Listar todos os carrinhos:
-app.get('/carrinhos', verifyJWT, (req, res) => {
-  const query = 'SELECT * FROM Carrinhos';
-  banco.conn.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar carrinhos.' });
-      return;
-    }
-
-    res.status(200).json({ carts: results });
-  });
-});
-
-// Atualizar um carrinho pelo ID:
-app.put('/carrinhos/:carrinhoID', verifyJWT, (req, res) => {
-  const carrinhoID = req.params.carrinhoID;
-  const { idCliente, dataPublicacao, dataAtualizacao, idLoja } = req.body;
-
-  const query = 'UPDATE Carrinhos SET idCliente = ?, dataPublicacao = ?, dataAtualizacao = ?, idLoja = ? WHERE idCarrinho = ?';
-  banco.conn.query(query, [idCliente, dataPublicacao, dataAtualizacao, idLoja, carrinhoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o carrinho.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Carrinho atualizado com sucesso.' });
-  });
-});
-
-// Deletar um carrinho pelo ID:
-app.delete('/carrinhos/:carrinhoID', verifyJWT, (req, res) => {
-  const carrinhoID = req.params.carrinhoID;
-
-  const query = 'DELETE FROM Carrinhos WHERE idCarrinho = ?';
-  banco.conn.query(query, [carrinhoID], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o carrinho.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Carrinho deletado com sucesso.' });
-  });
-});
-
-// TODO: LISTAR O CARRINHO DA PESSOA ATUAL, NAO PODE SER VINCULADO COM O ID
-
-
-// !carrinhos
-
-// create table carrinho_produto_variante
-// !carrinho_produto_variante
-// Inserir um novo produto variante em um carrinho:
-app.post('/carrinhoProdutoVariante', verifyJWT, (req, res) => {
-  const { idProduto, idVariante, idCarrinho, dataAtualizacao } = req.body;
-
-  const query = 'INSERT INTO Carrinho_Produto_Variante (idProduto, idVariante, idCarrinho, dataAtualizacao) VALUES (?, ?, ?, ?)';
-  banco.conn.query(query, [idProduto, idVariante, idCarrinho, dataAtualizacao], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao adicionar produto variante ao carrinho.' });
-      return;
-    }
-
-    res.status(201).json({ message: 'Produto variante adicionado ao carrinho com sucesso.' });
-  });
-});
-
-// Listar todos os produtos variantes em um carrinho:
-app.get('/carrinhoProdutoVariante/:idCarrinho', verifyJWT, (req, res) => {
-  const idCarrinho = req.params.idCarrinho;
-  const query = 'SELECT * FROM Carrinho_Produto_Variante WHERE idCarrinho = ?';
-  banco.conn.query(query, [idCarrinho], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao listar produtos variantes no carrinho.' });
-      return;
-    }
-
-    res.status(200).json({ cartProducts: results });
-  });
-});
-
-
-// Atualizar um produto variante em um carrinho pelo ID do Produto e ID do Carrinho:
-app.put('/carrinhoProdutoVariante/:idProduto/:idCarrinho', verifyJWT, (req, res) => {
-  const idProduto = req.params.idProduto;
-  const idCarrinho = req.params.idCarrinho;
-  const { idVariante, dataAtualizacao } = req.body;
-
-  const query = 'UPDATE Carrinho_Produto_Variante SET idVariante = ?, dataAtualizacao = ? WHERE idProduto = ? AND idCarrinho = ?';
-  banco.conn.query(query, [idVariante, dataAtualizacao, idProduto, idCarrinho], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao atualizar o produto variante no carrinho.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Produto variante no carrinho atualizado com sucesso.' });
-  });
-});
-
-// Deletar um produto variante em um carrinho pelo ID do Produto e ID do Carrinho:
-app.delete('/carrinhoProdutoVariante/:idProduto/:idCarrinho', verifyJWT, (req, res) => {
-  const idProduto = req.params.idProduto;
-  const idCarrinho = req.params.idCarrinho;
-
-  const query = 'DELETE FROM Carrinho_Produto_Variante WHERE idProduto = ? AND idCarrinho = ?';
-  banco.conn.query(query, [idProduto, idCarrinho], (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Erro ao deletar o produto variante do carrinho.' });
-      return;
-    }
-
-    res.status(200).json({ message: 'Produto variante do carrinho deletado com sucesso.' });
-  });
-});
-
-// !carrinho_produto_variante
 
 
 
