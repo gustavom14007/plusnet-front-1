@@ -8,7 +8,7 @@ function Pedidos() {
   const [isModalAberto, setIsModalAberto] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/produtos/produtos", {
+    fetch("http://localhost:3000/produtos/produtos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ function Pedidos() {
 
   const handleAdicionarAoCarrinho = () => {
     // Lógica para adicionar ao carrinho
-    fetch("http://localhost:5000/adicionarAoCarrinho", {
+    fetch("http://localhost:3000/adicionarAoCarrinho", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
