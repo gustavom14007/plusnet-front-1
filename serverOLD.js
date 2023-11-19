@@ -21,12 +21,12 @@ app.use(bodyParser.urlencoded({
 
 
 // Importando os módulos das rotas
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes.js');
 
 // Usando as rotas no aplicativo Express
 app.use('/auth', authRoutes);
 
-const lojasRoutes = require('./routes/lojaRoutes');
+const lojasRoutes = require('./routes/lojaRoutes.js');
 
 // Usando as rotas
 app.use('/lojas', lojasRoutes);
