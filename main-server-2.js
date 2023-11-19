@@ -5,8 +5,12 @@
 // npm i jsonwebtoken
 // npm i body-parser
 // npm i dotenv
+// npm install cors
+// npm install express-list-endpoints
 
 const express = require('express');
+const expressListEndpoints = require('express-list-endpoints');
+
 const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
@@ -65,6 +69,12 @@ app.use('/grupoSubgrupos', grupoSubgrupoRoutes);
 app.use('/marcaProdutos', marcaProdutoRoutes);
 app.use('/grupoProdutos', grupoProdutoRoutes);
 app.use('/carrinhoFuncional', carrinhoFuncionalRoutes);
+
+
+// Adicione esta parte no final do arquivo
+const endpoints = expressListEndpoints(app);
+console.log(endpoints);
+
 
 const portaNode = process.env.API_PORT || 3000;
 

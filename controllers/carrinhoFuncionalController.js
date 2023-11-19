@@ -5,12 +5,16 @@ const banco = require('../database/main-db');
 
 async function adicionarAoCarrinho(req, res) {
     try {
-        const { produtoID, varianteID, quantidade } = req.body;
+        let { carrinhoID, produtoID, varianteID, quantidade } = req.body;
         const userId = req.userId;
         const lojaDoUsuario = req.userLoja; // Obtenha a loja do usuário a partir do token JWT
 
-        // Verifique se o usuário já possui um carrinho
-        let carrinhoID = null;
+
+        if (!carrinhoID) {
+            // Verifique se o usuário já possui um carrinho
+            carrinhoID = null;
+        }
+
 
         const getCarrinhoExistente = () => {
             return new Promise((resolve, reject) => {
@@ -26,27 +30,29 @@ async function adicionarAoCarrinho(req, res) {
 
         const carrinhoExistente = await getCarrinhoExistente();
 
-        if (carrinhoExistente.length === 0 || carrinhoExistente[0].status === 'pedido') {
-            // Se o usuário não possui um carrinho ou o carrinho existente está com status "pedido", crie um novo carrinho
-            const inserirCarrinhoResult = await new Promise((resolve, reject) => {
-                banco.conn.query('INSERT INTO carrinhos (userID, idLoja) VALUES (?, ?)', [userId, lojaDoUsuario], (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
+        if (!carrinhoID) {
+            if (carrinhoExistente.length === 0 || carrinhoExistente[0].status === 'pedido') {
+                // Se o usuário não possui um carrinho ou o carrinho existente está com status "pedido", crie um novo carrinho
+                const inserirCarrinhoResult = await new Promise((resolve, reject) => {
+                    banco.conn.query('INSERT INTO carrinhos (userID, idLoja) VALUES (?, ?)', [userId, lojaDoUsuario], (err, results) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(results);
+                        }
+                    });
                 });
-            });
 
-            if (inserirCarrinhoResult.insertId) {
-                // Obtenha o ID do carrinho criado
-                carrinhoID = inserirCarrinhoResult.insertId;
+                if (inserirCarrinhoResult.insertId) {
+                    // Obtenha o ID do carrinho criado
+                    carrinhoID = inserirCarrinhoResult.insertId;
+                } else {
+                    throw new Error('Erro ao criar carrinho');
+                }
             } else {
-                throw new Error('Erro ao criar carrinho');
+                // O usuário já possui um carrinho ativo, obtenha seu ID
+                carrinhoID = carrinhoExistente[0].idCarrinho;
             }
-        } else {
-            // O usuário já possui um carrinho ativo, obtenha seu ID
-            carrinhoID = carrinhoExistente[0].idCarrinho;
         }
 
         // Verifique se o produto já existe no carrinho
@@ -74,7 +80,7 @@ async function adicionarAoCarrinho(req, res) {
 
             if (inserirProdutoResult.insertId) {
                 // Produto inserido com sucesso
-                res.status(200).json({ message: 'Produto adicionado ao carrinho com sucesso!' });
+                res.status(200).json({ carrinhoID: carrinhoID, message: 'Produto adicionado ao carrinho com sucesso!' });
             } else {
                 throw new Error('Erro ao inserir o produto no carrinho');
             }
