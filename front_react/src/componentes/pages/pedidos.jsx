@@ -6,23 +6,34 @@ function Pedidos() {
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [quantidadeProduto, setQuantidadeProduto] = useState(1);
   const [isModalAberto, setIsModalAberto] = useState(false);
+  const [erroCarregamento, setErroCarregamento] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/produtos/produtos", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data);
-        setProdutos(data);
+    fetch("http://localhost:3000/produtos/produtos")
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error("Erro ao carregar produtos.");
+        }
+        return resp.json();
       })
-      .catch((err) => console.log(err));
+      .then((data) => {
+        console.log("Dados recebidos:", data);
+        setProdutos(data.data.products); // Ajuste aqui para refletir a estrutura dos dados
+      })
+      .catch((err) => {
+        console.error("Erro na requisição:", err);
+        setErroCarregamento(err.message);
+      });
   }, []);
 
+  console.log("Produtos:", produtos);
+
   const handleAdicionarAoCarrinho = () => {
+    if (!produtoSelecionado) {
+      alert("Selecione um produto antes de adicionar ao carrinho.");
+      return;
+    }
+  
     // Lógica para adicionar ao carrinho
     fetch("http://localhost:3000/adicionarAoCarrinho", {
       method: "POST",
@@ -30,18 +41,28 @@ function Pedidos() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        produtoId: produtoSelecionado.id,
+        produtoID: produtoSelecionado.id,
         quantidade: quantidadeProduto,
       }),
     })
-      .then((resp) => resp.json())
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error("Erro ao adicionar ao carrinho.");
+        }
+        return resp.json();
+      })
       .then((data) => {
-        console.log(data);
+        console.log("Resposta da API:", data); // Adicione este log para verificar a resposta da API
         // Lógica adicional, se necessário
+        alert("Produto adicionado ao carrinho com sucesso!");
         setIsModalAberto(false);
         // Adicionar lógica de sucesso ou tratamento de erro, se necessário
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        alert("Erro ao adicionar ao carrinho. Tente novamente mais tarde.");
+        // Adicionar lógica de tratamento de erro, se necessário
+      });
   };
 
   return (
@@ -50,35 +71,38 @@ function Pedidos() {
         <h1>Produtos</h1>
       </div>
 
+      {erroCarregamento && <p>{erroCarregamento}</p>}
+
       <div className={styles.div_relatorio}>
         <ul className={styles.ul_cards}>
-          {produtos.map((produto) => (
-            <li key={produto.id} className={styles.li_cards}>
-              <p>
-                <strong>Nome:</strong> {produto.nome}
-              </p>
-              <p>
-                <strong>Marca:</strong> {produto.marca}
-              </p>
-              <p>
-                <strong>Preço:</strong> {produto.preco}
-              </p>
-              <p>
-                <strong>Preço Promocional:</strong> {produto.precoPromocional}
-              </p>
-              <div className={styles.buttons}>
-                <button
-                  className={styles.button2_cards}
-                  onClick={() => {
-                    setProdutoSelecionado(produto);
-                    setIsModalAberto(true);
-                  }}
-                >
-                  Adicionar ao carrinho
-                </button>
-              </div>
-            </li>
-          ))}
+          {Array.isArray(produtos) &&
+            produtos.map((produto) => (
+              <li key={produto.id} className={styles.li_cards}>
+                <p>
+                  <strong>Nome:</strong> {produto.nome}
+                </p>
+                <p>
+                  <strong>Marca:</strong> {produto.marca}
+                </p>
+                <p>
+                  <strong>Preço:</strong> {produto.preco}
+                </p>
+                <p>
+                  <strong>Preço Promocional:</strong> {produto.precoPromocional}
+                </p>
+                <div className={styles.buttons}>
+                  <button
+                    className={styles.button2_cards}
+                    onClick={() => {
+                      setProdutoSelecionado(produto);
+                      setIsModalAberto(true);
+                    }}
+                  >
+                    Adicionar ao carrinho
+                  </button>
+                </div>
+              </li>
+            ))}
         </ul>
       </div>
 
