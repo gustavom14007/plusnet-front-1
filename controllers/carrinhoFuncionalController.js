@@ -7,13 +7,20 @@ async function adicionarAoCarrinho(req, res) {
     try {
         let { carrinhoID, produtoID, varianteID, quantidade } = req.body;
         let userId = req.userId;
-        const lojaDoUsuario = req.userLoja; // Obtenha a loja do usuário a partir do token JWT
+        let lojaDoUsuario = req.userLoja; // Obtenha a loja do usuário a partir do token JWT
         let statusCarrinho = null;
 
         if (!userId) {
             userId = '1'
         }
 
+        if (!lojaDoUsuario) {
+            lojaDoUsuario = '1'
+        }
+
+        if (!varianteID) {
+            varianteID = '1'
+        }
 
         const carrinhoExistente = await getCarrinhoExistente(userId, carrinhoID);
 
@@ -115,10 +122,10 @@ async function adicionarAoCarrinho(req, res) {
             }
         }
 
-
+        //  a
         // Verifique se o produto já existe no carrinho
         const produtoNoCarrinhoResult = await new Promise((resolve, reject) => {
-            banco.conn.query('SELECT idCarrinhoProdutoVariante, quantidade FROM Carrinho_Produto_Variante WHERE idCarrinho = ? AND idProduto = ? AND idVariante = ?', [carrinhoID, produtoID, varianteID], (err, results) => {
+            banco.conn.query('SELECT idCarrinhoProdutoVariante, idCarrinho, idProduto, quantidade FROM Carrinho_Produto_Variante WHERE idCarrinho = ? AND idProduto = ? AND idVariante = ?', [carrinhoID, produtoID, varianteID], (err, results) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -142,8 +149,8 @@ async function adicionarAoCarrinho(req, res) {
             if (inserirProdutoResult.insertId) {
                 // Produto inserido com sucesso
                 let carrinhoTeste = await getCarrinhoExistente(userId, carrinhoID)
-                let produtosLista = getProdutosDoCarrinho(carrinhoID)
-                res.status(200).json({ carrinhoID: carrinhoID, carrinhoTeste, produtosLista, message: 'Produto adicionado ao carrinho com sucesso!' });
+                let produtosLista = await getProdutosDoCarrinho(carrinhoID)
+                res.status(200).json({ carrinhoID: carrinhoID, produtosLista, message: 'Produto adicionado ao carrinho com sucesso!' });
 
 
             } else {
@@ -167,13 +174,14 @@ async function adicionarAoCarrinho(req, res) {
             if (atualizarQuantidadeResult.affectedRows > 0) {
                 // Quantidade atualizada com sucesso
                 let carrinhoTeste = await getCarrinhoExistente(userId, carrinhoID)
-                let produtosLista = getProdutosDoCarrinho(carrinhoID)
-                res.status(200).json({ carrinhoID: carrinhoID, carrinhoTeste, produtosLista, message: 'Produto adicionado ao carrinho com sucesso!' });
+                let produtosLista = await getProdutosDoCarrinho(carrinhoID)
+                res.status(200).json({ carrinhoID: carrinhoID, produtosLista, message: 'Produto adicionado ao carrinho com sucesso!' });
 
             } else {
                 throw new Error('Erro ao atualizar a quantidade do produto no carrinho');
             }
         }
+        // a
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message, error: 'Erro ao adicionar o produto ao carrinho.' });
@@ -216,48 +224,55 @@ async function getCarrinhoExistente(userId, carrinhoID) {
 }
 
 
-
 async function getProdutosDoCarrinho(carrinhoID) {
     return new Promise((resolve, reject) => {
-        let query = 'SELECT c.idCarrinho, c.status, cpv.idCarrinhoProdutoVariante, cpv.idProduto, cpv.idVariante, cpv.quantidade, p.nome, p.descricao, p.preco FROM carrinhos c';
-        query += ' LEFT JOIN Carrinho_Produto_Variante cpv ON c.idCarrinho = cpv.idCarrinho';
-        query += ' LEFT JOIN produtos p ON cpv.idProduto = p.idProduto';
-        query += ' WHERE c.idCarrinho = ?';
+        let query = 'SELECT cpv.idCarrinhoProdutoVariante, p.idProduto, p.nome AS nomeProduto, p.descricao AS descricaoProduto, p.marca, p.grupo, p.preco, p.precoPromocional, p.identificadorERP, p.situacao, p.idLoja, v.idVariante, a.idAtributo, va.idValorAtributo, va.texto AS valorAtributo, cpv.quantidade';
+        query += ' FROM carrinho_produto_variante cpv';
+        query += ' JOIN produtos p ON cpv.idProduto = p.idProduto';
+        query += ' LEFT JOIN variantes v ON cpv.idVariante = v.idVariante';
+        query += ' LEFT JOIN atributos a ON v.idVariante = a.idVariante';
+        query += ' LEFT JOIN valor_atributo va ON a.idAtributo = va.idAtributo';
+        query += ' WHERE cpv.idCarrinho = ?';
 
         banco.conn.query(query, [carrinhoID], (err, results) => {
             if (err) {
                 reject(err);
             } else {
-                // Agrupe os resultados pelo idCarrinho para formar a lista de produtos
-                const carrinho = results.reduce((acc, row) => {
-                    if (!acc.idCarrinho) {
-                        // Configuração inicial do carrinho
-                        acc.idCarrinho = row.idCarrinho;
-                        acc.status = row.status;
-                        acc.produtos = [];
-                    }
+                // Inicializa o carrinho e a lista de produtos
+                const carrinho = {
+                    idCarrinho: carrinhoID,
+                    produtos: []
+                };
 
-                    if (row.idCarrinhoProdutoVariante) {
-                        // Adiciona o produto à lista de produtos do carrinho
-                        acc.produtos.push({
-                            idCarrinhoProdutoVariante: row.idCarrinhoProdutoVariante,
-                            idProduto: row.idProduto,
-                            idVariante: row.idVariante,
-                            quantidade: row.quantidade,
-                            nome: row.nome,
-                            descricao: row.descricao,
-                            preco: row.preco,
-                        });
-                    }
-
-                    return acc;
-                }, {});
+                // Adiciona cada produto à lista de produtos do carrinho
+                results.forEach(row => {
+                    carrinho.produtos.push({
+                        idCarrinhoProdutoVariante: row.idCarrinhoProdutoVariante,
+                        idProduto: row.idProduto,
+                        idVariante: row.idVariante,
+                        quantidade: row.quantidade,
+                        nome: row.nomeProduto,
+                        descricao: row.descricaoProduto,
+                        marca: row.marca,
+                        grupo: row.grupo,
+                        preco: row.preco,
+                        precoPromocional: row.precoPromocional,
+                        identificadorERP: row.identificadorERP,
+                        situacao: row.situacao,
+                        idLoja: row.idLoja,
+                        idAtributo: row.idAtributo,
+                        idValorAtributo: row.idValorAtributo,
+                        valorAtributo: row.valorAtributo,
+                    });
+                });
 
                 resolve(carrinho);
             }
         });
     });
 }
+
+
 
 
 
