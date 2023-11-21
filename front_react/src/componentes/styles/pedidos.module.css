@@ -20,6 +20,7 @@
 .div_relatorio {
   display: flex;
   justify-content: center;
+ 
 }
 
 .ul_cards {
@@ -37,7 +38,7 @@
   margin: 10px;
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
+
 }
 
 .li_cards p {
@@ -228,4 +229,108 @@
   color: #fff;
   border: none;
   border-radius: 5px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto; /* Ajuste conforme necessário */
+  height: 150px; /* Ajuste conforme necessário */
+
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: #f0f0f0; /* Cor de fundo da div */
+}
+
+.produtoImagem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Para manter a proporção da imagem */
+}
+
+.icon {
+  font-size: 40px; /* Tamanho do ícone */
+  color: #555; /* Cor do ícone */
+}
+
+
+.modal_cadastro {
+  padding: 2rem;
+  border-radius: 8px;
+  width: 80%; /* Ajuste conforme necessário */
+  max-width: 400px; /* Defina uma largura máxima */
+  text-align: center;
+}
+
+.modal_cadastro p {
+  margin-bottom: 1.5rem; /* Espaçamento inferior reduzido */
+}
+
+.form_cadastro input {
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.modal_cadastro p {
+  margin-bottom: 1.5rem; /* Espaçamento inferior reduzido */
+}
+
+.form_cadastro input {
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.button2_cards {
+  background-color: #10c000;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 8px; /* Ajuste conforme necessário */
+  max-width: 150px; /* Defina uma largura máxima */
+  width: 100%; /* Ocupa 100% da largura do contêiner pai */
+  border: white;
+  font-weight: bold;
+}
+
+.botao_adicionar {
+  width: 100%; /* Ocupa 100% da largura do contêiner pai */
+  max-width: 150px; /* Defina uma largura máxima */
+  height: auto; /* Ajuste conforme necessário */
+}
+
+
+/* Estilos para a área de filtro */
+.filter-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilos para os campos de input de filtro */
+.filter-input {
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Estilos para o botão de filtro */
+.filter-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.filter-button:hover {
+  background-color: #0056b3;
 }

@@ -63,6 +63,8 @@ function listarProdutos(req, res) {
             idLoja
         } = req.query;
 
+
+
         let query = 'SELECT * FROM Produtos WHERE 1';
 
         if (idProduto) {
@@ -82,11 +84,11 @@ function listarProdutos(req, res) {
         }
 
         if (marca) {
-            query += ` AND marca = '${marca}'`;
+            query += ` AND marca LIKE '%${marca}%'`;
         }
 
         if (grupo) {
-            query += ` AND grupo = '${grupo}'`;
+            query += ` AND grupo LIKE '%${grupo}%'`;
         }
 
         if (descricao) {

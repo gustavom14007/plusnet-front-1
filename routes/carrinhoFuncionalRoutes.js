@@ -10,4 +10,6 @@ router.post('/criarPedido', carrinhoFuncionalController.criarPedido);
 router.get('/listarPedidosUsuario', carrinhoFuncionalController.listarPedidosUsuario);
 router.get('/listarPedidos', carrinhoFuncionalController.listarPedidos);
 
+
+
 module.exports = router;

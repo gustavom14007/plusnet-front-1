@@ -1,4 +1,4 @@
-import {BrowserRouter as Router,Route,Routes}from"react-router-dom"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 
 import logo from './logo.svg';
 import './App.css';
@@ -20,26 +20,27 @@ import Carrinho from "./componentes/pages/carrinho";
 function App() {
   return (
     <Router>
-      <Header/>
+      <Header />
       <Routes>
-        <Route exact path="/header" element={<Header/>}/>
-        <Route exact path="/cadastroFuncionario" element={<CadastroFuncionario/>}/>
-        <Route exact path="/login" element={<Login/>}/>
-        <Route exact path="/pedidos" element={<Pedidos/>}/>
-        <Route exact path="/relatorios" element={<Relatorios/>}/>
-        <Route exact path="/cadastros" element={<Cadastros/>}/>
-        <Route exact path="/relatorioFuncionario" element={<RelatorioFuncionario/>}/>
-        <Route exact path="/relatorioCliente" element={<RelatorioCliente/>}/>
-        <Route exact path="/relatorioProduto" element={<RelatorioProduto/>}/>
-        <Route exact path="/relatorioPedido" element={<RelatorioPedido/>}/>
-        <Route exact path="/relatorioProducao" element={<RelatorioProducao/>}/>
-        <Route exact path="/home" element={<Home/>}/>
-        <Route exact path="/carrinho" element={<Carrinho/>}/>
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/header" element={<Header />} />
+        <Route exact path="/cadastroFuncionario" element={<CadastroFuncionario />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/pedidos" element={<Pedidos />} />
+        <Route exact path="/relatorios" element={<Relatorios />} />
+        <Route exact path="/cadastros" element={<Cadastros />} />
+        <Route exact path="/relatorioFuncionario" element={<RelatorioFuncionario />} />
+        <Route exact path="/relatorioCliente" element={<RelatorioCliente />} />
+        <Route exact path="/relatorioProduto" element={<RelatorioProduto />} />
+        <Route exact path="/relatorioPedido" element={<RelatorioPedido />} />
+        <Route exact path="/relatorioProducao" element={<RelatorioProducao />} />
+        <Route exact path="/home" element={<Home />} />
+        <Route exact path="/carrinho" element={<Carrinho />} />
       </Routes>
-    
-      <Footer/>
+
+      <Footer />
     </Router>
-     
+
   );
 }
 

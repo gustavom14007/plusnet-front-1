@@ -1,21 +1,15 @@
 .formulario_container {
-
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #ffffff;
-  
-  /* padding: 4rem 0; */
+  padding: 2rem;
 }
-
 
 .titulo_formulario {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
   color: #5eff00;
-  
+  margin-bottom: 1rem;
 }
-
-/* relatorioCliente.module.css */
 
 .div_relatorio {
   display: flex;
@@ -28,7 +22,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 80%; /* Ajuste para ocupar 80% da tela */
+  width: 80%;
 }
 
 .li_cards {
@@ -37,7 +31,8 @@
   margin: 10px;
   padding: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
+  width: 300px; /* Ajuste para o tamanho desejado */
+  position: relative;
 }
 
 .li_cards p {
@@ -46,140 +41,27 @@
   padding-bottom: 8px;
 }
 
-/* Se quiser uma sombra mais forte ao passar o mouse */
 .li_cards:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.619);
 }
 
-.button_cards{
+.button_cards,
+.button2_cards {
   background-color: #850f00;
-    color: #ccc;
-    border-radius: 6px;
-    padding: 4px;
-    width: 66px;
-    border: white;
-    font-weight: bold
-
-}
-
-.button_cards:hover{
-  box-shadow: 0 7px 16px rgba(255, 0, 0, 0.615);
-
-}
-
-/* relatorioCliente.module.css */
-
-.modal_exclusao {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  z-index: 1000;
-  text-align: center;
-}
-
-.modal_exclusao p {
-  margin-bottom: 20px;
-}
-
-.modal_botoes {
-  display: flex;
-  justify-content: center;
-}
-
-.modal_botoes button {
-  margin: 0 10px;
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: #ff3333;
-  color: #fff;
+  color: #ccc;
+  border-radius: 6px;
+  padding: 4px;
+  width: 100%;
   border: none;
-  border-radius: 5px;
-}
-
-/* Adicione mais estilos conforme necessário */
-/* Adapte conforme necessário */
-
-.button2_cards{
-  background-color: #10c000;
-    color: #ffffff;
-    border-radius: 6px;
-    padding: 4px;
-    width: 100%;
-    border: white;
-    font-weight: bold
-
-}
-
-.button2_cards:hover{
-  box-shadow: 0 7px 16px rgba(64, 255, 0, 0.615);
-
-}
-
-.modal_edicao {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color:  rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 8px;
-  z-index: 1000;
-  text-align: center;
-  color: #ffffff;
-  /* Adicione mais estilos conforme necessário */
-}
-
-.form_edicao {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Adapte conforme necessário */
-.buttons{
-  justify-content: space-between;
-  display: flex;
-}
-
-
-.div_adicionar{
-
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: end;
-  width: 80%;
-
-
-}
-
-
-.botao_adicionar{
-
-  width: 128px;
-  height: 39px;
-  background: black;
-  color: white;
   font-weight: bold;
-  border-radius: 5px;
-  border: white;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-
-
+  cursor: pointer;
+  margin-top: 8px;
 }
 
-
-.botao_adicionar:hover{
-  box-shadow: 0 7px 16px rgba(255, 255, 255, 0.615);
-
+.button_cards:hover,
+.button2_cards:hover {
+  box-shadow: 0 7px 16px rgba(255, 0, 0, 0.615);
 }
-
 
 .modal_cadastro {
   position: fixed;
@@ -198,23 +80,6 @@
   margin-bottom: 20px;
 }
 
-.form_cadastro {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form_cadastro label {
-  margin-bottom: 10px;
-}
-
-.form_cadastro input {
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #fff;
-  border-radius: 5px;
-}
-
 .modal_botoes {
   display: flex;
   justify-content: center;
@@ -228,4 +93,39 @@
   color: #fff;
   border: none;
   border-radius: 5px;
+}
+
+.totalContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  width: 80%;
+}
+
+.totalLabel,
+.totalValue {
+  font-size: 1.2rem;
+}
+
+.finalizarContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 80%;
+  margin-top: 1rem;
+}
+
+.buttonFinalizar {
+  width: 150px;
+  height: 40px;
+  background: black;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  border: white;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.buttonFinalizar:hover {
+  box-shadow: 0 7px 16px rgba(255, 255, 255, 0.615);
 }

@@ -32,19 +32,12 @@ function Header() {
           isMobileMenuOpen ? styles.open : ""
         }`}
       >
-        <div className={styles.header_menus}>
-        
-        </div>
+        <div className={styles.header_menus}></div>
 
-        
         <Link to="/carrinho">
           <li className={styles.item}>Carrinho</li>
         </Link>
-        
-        
-
       </ul>
-
     </div>
   );
 }

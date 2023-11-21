@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/pedidos.module.css";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
+
 function Pedidos() {
   const [produtos, setProdutos] = useState([]);
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
@@ -23,7 +26,7 @@ function Pedidos() {
       })
       .then((data) => {
         console.log("Dados recebidos:", data);
-       
+
         setProdutos(data.data.products); // Ajuste aqui para refletir a estrutura dos dados
       })
       .catch((err) => {
@@ -34,12 +37,35 @@ function Pedidos() {
 
   console.log("Produtos:", produtos);
 
+  const [filtroNome, setFiltroNome] = useState("");
+  const [filtroMarca, setFiltroMarca] = useState("");
+
+  const handleFiltrar = () => {
+    // Lógica para buscar produtos com base nos filtros
+    fetch(
+      `http://localhost:3000/produtos/produtos?nome=${filtroNome}&marca=${filtroMarca}`
+    )
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error("Erro ao filtrar produtos.");
+        }
+        return resp.json();
+      })
+      .then((data) => {
+        setProdutos(data.data.products);
+      })
+      .catch((err) => {
+        console.error("Erro na requisição:", err);
+        setErroCarregamento(err.message);
+      });
+  };
+
   const handleAdicionarAoCarrinho = () => {
     if (!produtoSelecionado) {
       alert("Selecione um produto antes de adicionar ao carrinho.");
       return;
     }
-  
+
     // Lógica para adicionar ao carrinho
     fetch("http://localhost:3000/carrinhoFuncional/adicionarAoCarrinho", {
       method: "POST",
@@ -52,10 +78,12 @@ function Pedidos() {
               produtoID: produtoSelecionado.id,
               quantidade: quantidadeProduto,
               carrinhoID: CarrinhoID,
+              acao: "adicionar",
             }
           : {
               produtoID: produtoSelecionado.id,
               quantidade: quantidadeProduto,
+              acao: "adicionar",
             }
       ),
     })
@@ -70,12 +98,12 @@ function Pedidos() {
         console.log("Resposta da API:", data); // Adicione este log para verificar a resposta da API
         // Lógica adicional, se necessário
         alert("Produto adicionado ao carrinho com sucesso!");
-    // Verifica se há CarrinhoID na resposta da API e, se não existir no estado, atualiza o estado
-    if (data.carrinhoID && !CarrinhoID) {
-      setCarrinhoID(data.carrinhoID);
-      // Salva o CarrinhoID no localStorage para uso futuro
-      localStorage.setItem("CarrinhoID", data.carrinhoID);
-    }
+        // Verifica se há CarrinhoID na resposta da API e, se não existir no estado, atualiza o estado
+
+        setCarrinhoID(data.carrinhoID);
+        // Salva o CarrinhoID no localStorage para uso futuro
+        localStorage.setItem("CarrinhoID", data.carrinhoID);
+
         setIsModalAberto(false);
         // Adicionar lógica de sucesso ou tratamento de erro, se necessário
       })
@@ -92,6 +120,37 @@ function Pedidos() {
         <h1>Produtos</h1>
       </div>
 
+      {/* Área de filtro */}
+      <div className={`filter-container ${styles.div_relatorio}`}>
+        <div>
+          <label htmlFor="filtroNome">Nome:</label>
+          <input
+            type="text"
+            id="filtroNome"
+            className={`filter-input ${styles.input}`}
+            value={filtroNome}
+            onChange={(e) => setFiltroNome(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="filtroMarca">Marca:</label>
+          <input
+            type="text"
+            id="filtroMarca"
+            className={`filter-input ${styles.input}`}
+            value={filtroMarca}
+            onChange={(e) => setFiltroMarca(e.target.value)}
+          />
+        </div>
+
+        <button
+          className={`filter-button ${styles.button}`}
+          onClick={handleFiltrar}
+        >
+          Filtrar
+        </button>
+      </div>
       {erroCarregamento && <p>{erroCarregamento}</p>}
 
       <div className={styles.div_relatorio}>
@@ -99,6 +158,17 @@ function Pedidos() {
           {Array.isArray(produtos) &&
             produtos.map((produto) => (
               <li key={produto.id} className={styles.li_cards}>
+                <div className={styles.iconContainer}>
+                  {produto.imagem ? (
+                    <img
+                      className={styles.produtoImagem}
+                      src={produto.imagem}
+                      alt={`Imagem de ${produto.nome}`}
+                    />
+                  ) : (
+                    <FontAwesomeIcon icon={faImage} className={styles.icon} />
+                  )}
+                </div>
                 <p>
                   <strong>Nome:</strong> {produto.nome}
                 </p>
@@ -137,7 +207,9 @@ function Pedidos() {
             onChange={(e) => setQuantidadeProduto(e.target.value)}
           />
           <div className={styles.modal_botoes}>
-            <button onClick={handleAdicionarAoCarrinho}>Adicionar ao Carrinho</button>
+            <button onClick={handleAdicionarAoCarrinho}>
+              Adicionar ao Carrinho
+            </button>
             <button onClick={() => setIsModalAberto(false)}>Cancelar</button>
           </div>
         </div>
