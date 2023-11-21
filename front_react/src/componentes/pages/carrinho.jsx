@@ -27,7 +27,7 @@ function Carrinho() {
 
     console.log(CarrinhoID);
 
-    console.log(CarrinhoID);
+    console.log("começar fetch " + CarrinhoID);
     if (CarrinhoID) {
       fetch("http://localhost:3000/carrinhoFuncional/adicionarAoCarrinho", {
         method: "POST",
@@ -47,7 +47,7 @@ function Carrinho() {
           return resp.json();
         })
         .then((data) => {
-          console.log(data.produtosLista.produtos);
+          console.log(data);
           setProdutos(data.produtosLista.produtos);
         })
         .catch((err) => {

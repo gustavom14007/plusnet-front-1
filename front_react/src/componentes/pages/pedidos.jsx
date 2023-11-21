@@ -17,6 +17,8 @@ function Pedidos() {
   });
 
   useEffect(() => {
+    // setCarrinhoID(localStorage.getItem("CarrinhoID"));
+
     fetch("http://localhost:3000/produtos/produtos")
       .then((resp) => {
         if (!resp.ok) {
@@ -61,7 +63,7 @@ function Pedidos() {
   };
 
   const handleAdicionarAoCarrinho = () => {
-    if (!produtoSelecionado) {
+    if (!produtoSelecionado || !produtoSelecionado.id) {
       alert("Selecione um produto antes de adicionar ao carrinho.");
       return;
     }

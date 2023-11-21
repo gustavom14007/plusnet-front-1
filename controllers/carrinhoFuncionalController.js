@@ -9,7 +9,7 @@ async function adicionarAoCarrinho(req, res) {
         let userId = req.userId;
         let lojaDoUsuario = req.userLoja;
 
-        console.log("carrinhoID 1 " + carrinhoID);
+        console.log("carrinhoID 1 " + carrinhoID + produtoID + varianteID + quantidade + inserir + acao);
 
         if (!userId) {
             userId = '1';
